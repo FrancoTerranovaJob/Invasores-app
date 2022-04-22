@@ -53,15 +53,18 @@ class DataBaseProvider extends IDataBaseProvider {
     try {
       await db.transaction((txn) async {
         final batch = txn.batch();
-        batch.insert(planets, {'planet_id': 'fokushima', 'name': 'fokushima'});
+        /*  batch.insert(planets, {'planet_id': 'fokushima', 'name': 'fokushima'});
         batch.insert(transport,
             {'transport_id': '1234', 'name': 'vehiculo', 'type': 'vehiculo'});
         batch.insert(transport,
-            {'transport_id': '334', 'name': 'starship', 'type': 'starship'});
+            {'transport_id': '334', 'name': 'starship', 'type': 'starship'});*/
         final invaders = setCharactersRequest.toJson();
 
         for (var char in invaders['characters']) {
-          batch.insert(character, char['character']);
+          batch.insert(
+            character,
+            char['character'],
+          );
           batch.insert(characterPlanet, char['characterPlanet']);
           batch.insert(bodyData, char['bodyData']);
           for (var transports in char['characterTransports']) {
@@ -96,7 +99,7 @@ class DataBaseProvider extends IDataBaseProvider {
     }
 
     log('$characters');
-    return GetConsolidatedCharacters(characters: {});
+    return GetConsolidatedCharacters.fromJson(characters);
   }
 
   Future<List<Map<String, dynamic>>> _getCharacterWithProfile() async {
@@ -133,11 +136,37 @@ class DataBaseProvider extends IDataBaseProvider {
 
   @override
   Future<bool> addPlanets(SetPlanetsRequest setPlanetsRequest) async {
-    return true;
+    try {
+      await db.transaction((txn) async {
+        final batch = txn.batch();
+        final worlds = setPlanetsRequest.toJson();
+        for (var pts in worlds['planets']) {
+          batch.insert(planets, pts);
+        }
+        await batch.commit();
+      });
+
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
   @override
   Future<bool> addTransports(SetTransportsRequest setTransportsRequest) async {
-    return true;
+    try {
+      await db.transaction((txn) async {
+        final batch = txn.batch();
+        final shipsVls = setTransportsRequest.toJson();
+        for (var trs in shipsVls['transport']) {
+          batch.insert(transport, trs);
+        }
+        await batch.commit();
+      });
+
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 }

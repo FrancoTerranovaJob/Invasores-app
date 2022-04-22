@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kiwi/kiwi.dart';
+import 'package:urbe_solution/clean/data/providers/api/i_api_provider.dart';
+import 'package:urbe_solution/clean/data/providers/data_base/models/database_testing.dart';
+import 'package:urbe_solution/clean/data/providers/data_base/models/request/set_planets_request.dart';
+import 'package:urbe_solution/clean/data/providers/data_base/models/request/set_transports_request.dart';
 import 'package:urbe_solution/clean/presentation/core/welcome_screen.dart';
 import 'package:urbe_solution/modules/database_module.dart';
 import 'package:urbe_solution/modules/preferences_module.dart';
 import 'package:urbe_solution/modules/providers_module.dart';
 import 'package:urbe_solution/modules/repository_module.dart';
 import 'package:urbe_solution/modules/use_case_module.dart';
+import 'clean/data/providers/data_base/i_data_base_provider.dart';
+import 'clean/data/providers/data_base/models/request/set_characters_request.dart';
 import 'clean/presentation/core/core_bloc/core_bloc.dart';
 
 void main() async {
@@ -15,25 +22,21 @@ void main() async {
   await ProvidersModule.providersInitialize();
   await RepositoryModule.repositoryInitialize();
   await UseCaseModule.useCaseInitialize();
-  /* await KiwiContainer()
+
+/*  await KiwiContainer().resolve<IDataBaseProvider>().addPlanets(
+      SetPlanetsRequest.fromJson({'results': DataBaseTesting.getPlanets()}));
+  await KiwiContainer().resolve<IDataBaseProvider>().addTransports(
+      SetTransportsRequest.fromJson(
+          {'results': DataBaseTesting.getTransports()}));
+  await KiwiContainer().resolve<IDataBaseProvider>().addCharacters(
+      SetCharactersRequest.fromJson(
+          {'results': DataBaseTesting.getCharacters()}));
+  final result = await KiwiContainer()
       .resolve<IDataBaseProvider>()
-      .addCharacters(SetCharactersRequest(characters: const [
-        CharactersDB(
-            id: '5',
-            name: 'pepe Skywalker',
-            eyesColor: 'blue',
-            hairColor: 'brown',
-            height: '324',
-            skinColor: 'black',
-            gender: 'female',
-            fromPlanetId: 'fokushima',
-            bornYear: '344',
-            vehiclesId: ['1234'],
-            starShipsId: ['334'])
-      ]));
-  await KiwiContainer()
-      .resolve<IDataBaseProvider>()
-      .getConsolidatedCharacters();*/
+      .getConsolidatedCharacters();
+  print(result);*/
+
+  await KiwiContainer().resolve<IApiProvider>('OnlineApi').getData();
   runApp(const UberSolution());
 }
 
