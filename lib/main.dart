@@ -1,6 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:kiwi/kiwi.dart';
+import 'package:urbe_solution/clean/data/providers/configuration/i_configuration_provider.dart';
+import 'package:urbe_solution/clean/data/providers/data_base/i_data_base_provider.dart';
+import 'package:urbe_solution/modules/database_module.dart';
+import 'package:urbe_solution/modules/preferences_module.dart';
 
-void main() {
+import 'package:urbe_solution/modules/providers_module.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await PreferencesModule.preferencesModuleInitialize();
+  await DatabaseModule.databaseInitialize();
+  await ProvidersModule.providersInitialize();
+  final isFirstTime =
+      await KiwiContainer().resolve<IConfigurationProvider>().getIsFirstTime();
+  if (isFirstTime) {
+    await KiwiContainer().resolve<IDataBaseProvider>().createDataBase();
+  }
+  await KiwiContainer().resolve<IDataBaseProvider>().addCharacter('name');
+  await KiwiContainer().resolve<IDataBaseProvider>().getCharacters();
   runApp(const UberSolution());
 }
 
@@ -24,7 +42,9 @@ class UberSolution extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: Container(),
+      home: Container(
+        color: Colors.white,
+      ),
     );
   }
 }
