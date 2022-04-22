@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kiwi/kiwi.dart';
 import 'package:urbe_solution/clean/data/providers/configuration/i_configuration_provider.dart';
 import 'package:urbe_solution/clean/data/providers/data_base/i_data_base_provider.dart';
+import 'package:urbe_solution/clean/data/providers/data_base/models/request/set_characters_request.dart';
 import 'package:urbe_solution/modules/database_module.dart';
 import 'package:urbe_solution/modules/preferences_module.dart';
 
@@ -17,8 +18,25 @@ void main() async {
   if (isFirstTime) {
     await KiwiContainer().resolve<IDataBaseProvider>().createDataBase();
   }
-  await KiwiContainer().resolve<IDataBaseProvider>().addCharacter('name');
-  await KiwiContainer().resolve<IDataBaseProvider>().getCharacters();
+  await KiwiContainer()
+      .resolve<IDataBaseProvider>()
+      .addCharacter(SetCharactersRequest(characters: const [
+        CharactersDB(
+            id: '2',
+            name: 'asmr Skywalker',
+            eyesColor: 'brown',
+            hairColor: 'brown',
+            height: '166',
+            skinColor: 'light',
+            gender: 'male',
+            fromPlanetId: 'fokushima',
+            bornYear: '344',
+            vehiclesId: ['1234'],
+            starShipsId: ['334'])
+      ]));
+  await KiwiContainer()
+      .resolve<IDataBaseProvider>()
+      .getConsolidatedCharacters();
   runApp(const UberSolution());
 }
 
