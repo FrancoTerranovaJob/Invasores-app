@@ -99,7 +99,7 @@ class DataBaseProvider extends IDataBaseProvider {
     }
 
     log('$characters');
-    return GetConsolidatedCharacters(characters: {});
+    return GetConsolidatedCharacters.fromJson(characters);
   }
 
   Future<List<Map<String, dynamic>>> _getCharacterWithProfile() async {

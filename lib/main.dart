@@ -30,9 +30,10 @@ void main() async {
   await KiwiContainer().resolve<IDataBaseProvider>().addCharacters(
       SetCharactersRequest.fromJson(
           {'results': DataBaseTesting.getCharacters()}));
-  await KiwiContainer()
+  final result = await KiwiContainer()
       .resolve<IDataBaseProvider>()
       .getConsolidatedCharacters();
+  print(result);
   runApp(const UberSolution());
 }
 
