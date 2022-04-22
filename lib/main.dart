@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kiwi/kiwi.dart';
+import 'package:urbe_solution/clean/data/providers/api/i_api_provider.dart';
 import 'package:urbe_solution/clean/data/providers/data_base/models/database_testing.dart';
 import 'package:urbe_solution/clean/data/providers/data_base/models/request/set_planets_request.dart';
 import 'package:urbe_solution/clean/data/providers/data_base/models/request/set_transports_request.dart';
@@ -22,7 +23,7 @@ void main() async {
   await RepositoryModule.repositoryInitialize();
   await UseCaseModule.useCaseInitialize();
 
-  await KiwiContainer().resolve<IDataBaseProvider>().addPlanets(
+/*  await KiwiContainer().resolve<IDataBaseProvider>().addPlanets(
       SetPlanetsRequest.fromJson({'results': DataBaseTesting.getPlanets()}));
   await KiwiContainer().resolve<IDataBaseProvider>().addTransports(
       SetTransportsRequest.fromJson(
@@ -33,7 +34,9 @@ void main() async {
   final result = await KiwiContainer()
       .resolve<IDataBaseProvider>()
       .getConsolidatedCharacters();
-  print(result);
+  print(result);*/
+
+  await KiwiContainer().resolve<IApiProvider>('OnlineApi').getData();
   runApp(const UberSolution());
 }
 
