@@ -5,6 +5,20 @@ class SetPlanetsRequest extends Equatable {
 
   SetPlanetsRequest({required this.planets});
 
+  Map<String, dynamic> toJson() {
+    final data = <String, dynamic>{};
+    data['planets'] = planets.map((e) => e.toJson()).toList();
+    return data;
+  }
+
+  factory SetPlanetsRequest.fromJson(Map<String, dynamic> data) {
+    final plnets = <PlanetDB>[];
+    for (var plnts in data['results']) {
+      plnets.add(PlanetDB(name: plnts['name'], id: plnts['url']));
+    }
+    return SetPlanetsRequest(planets: plnets);
+  }
+
   @override
   List<Object?> get props => [planets];
 }
