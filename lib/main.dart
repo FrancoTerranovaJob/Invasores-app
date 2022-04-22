@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kiwi/kiwi.dart';
-import 'package:urbe_solution/clean/data/providers/data_base/i_data_base_provider.dart';
-import 'package:urbe_solution/clean/data/providers/data_base/models/request/set_characters_request.dart';
 import 'package:urbe_solution/clean/presentation/core/welcome_screen.dart';
 import 'package:urbe_solution/modules/database_module.dart';
 import 'package:urbe_solution/modules/preferences_module.dart';

@@ -1,14 +1,10 @@
 import 'dart:developer';
-
-import 'package:kiwi/kiwi.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:urbe_solution/clean/data/providers/data_base/i_data_base_provider.dart';
 import 'package:urbe_solution/clean/data/providers/data_base/models/request/set_characters_request.dart';
 import 'package:urbe_solution/clean/data/providers/data_base/models/request/set_planets_request.dart';
 import 'package:urbe_solution/clean/data/providers/data_base/models/request/set_transports_request.dart';
 import 'package:urbe_solution/clean/data/providers/data_base/models/response/get_consolidated_characters.dart';
-
-import '../configuration/i_configuration_provider.dart';
 
 class DataBaseProvider extends IDataBaseProvider {
   final Database db;

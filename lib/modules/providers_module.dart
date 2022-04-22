@@ -1,5 +1,4 @@
 import 'package:kiwi/kiwi.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:urbe_solution/clean/data/providers/api/i_api_provider.dart';
 import 'package:urbe_solution/clean/data/providers/api/offline_api_provider.dart';
 import 'package:urbe_solution/clean/data/providers/api/online_api_provider.dart';
