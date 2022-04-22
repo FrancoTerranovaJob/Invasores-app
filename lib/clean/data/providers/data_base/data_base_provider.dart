@@ -1,10 +1,14 @@
 import 'dart:developer';
 
+import 'package:kiwi/kiwi.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:urbe_solution/clean/data/providers/data_base/i_data_base_provider.dart';
 import 'package:urbe_solution/clean/data/providers/data_base/models/request/set_characters_request.dart';
+import 'package:urbe_solution/clean/data/providers/data_base/models/request/set_planets_request.dart';
+import 'package:urbe_solution/clean/data/providers/data_base/models/request/set_transports_request.dart';
 import 'package:urbe_solution/clean/data/providers/data_base/models/response/get_consolidated_characters.dart';
-import 'package:urbe_solution/clean/data/providers/data_base/models/database_testing.dart';
+
+import '../configuration/i_configuration_provider.dart';
 
 class DataBaseProvider extends IDataBaseProvider {
   final Database db;
@@ -14,39 +18,50 @@ class DataBaseProvider extends IDataBaseProvider {
   final String transport = 'Transport';
   final String characterPlanet = 'CharacterPlanet';
   final String characterTransport = 'CharacterTransport';
+
   DataBaseProvider({required this.db});
 
   @override
   Future<bool> createDataBase() async {
-    await db.transaction((txn) async {
-      await txn.execute(
-          'CREATE TABLE Character (character_id TEXT PRIMARY KEY, name TEXT, age INTEGER, gender INTEGER)');
-      await txn.execute('CREATE TABLE BodyData (character_id TEXT PRIMARY KEY, '
-          'height TEXT, eyes_color TEXT, hair_color TEXT, skin_color TEXT, '
-          'FOREIGN KEY (character_id) REFERENCES Character (character_id) ON DELETE NO ACTION ON UPDATE NO ACTION'
-          ')');
-      await txn.execute(
-          'CREATE TABLE Planets (planet_id TEXT PRIMARY KEY, name TEXT)');
-      await txn.execute(''
-          'CREATE TABLE Transport (transport_id TEXT PRIMARY KEY, name TEXT, type TEXT)');
-      await txn.execute(
-          'CREATE TABLE CharacterPlanet ( planet_id TEXT,  character_id TEXT  ,'
-          'PRIMARY KEY (planet_id, character_id)'
-          'UNIQUE(character_id)'
-          ')');
-      await txn.execute(
-          'CREATE TABLE CharacterTransport ( transport_id TEXT, character_id TEXT , '
-          'PRIMARY KEY (transport_id, character_id)'
-          ')');
-    });
-    return true;
+    try {
+      await db.transaction((txn) async {
+        await txn.execute(
+            'CREATE TABLE Character (character_id TEXT PRIMARY KEY, name TEXT, age INTEGER, gender INTEGER)');
+        await txn.execute(
+            'CREATE TABLE BodyData (character_id TEXT PRIMARY KEY, '
+            'height TEXT, eyes_color TEXT, hair_color TEXT, skin_color TEXT, '
+            'FOREIGN KEY (character_id) REFERENCES Character (character_id) ON DELETE NO ACTION ON UPDATE NO ACTION'
+            ')');
+        await txn.execute(
+            'CREATE TABLE Planets (planet_id TEXT PRIMARY KEY, name TEXT)');
+        await txn.execute(''
+            'CREATE TABLE Transport (transport_id TEXT PRIMARY KEY, name TEXT, type TEXT)');
+        await txn.execute(
+            'CREATE TABLE CharacterPlanet ( planet_id TEXT,  character_id TEXT  ,'
+            'PRIMARY KEY (planet_id, character_id)'
+            'UNIQUE(character_id)'
+            ')');
+        await txn.execute(
+            'CREATE TABLE CharacterTransport ( transport_id TEXT, character_id TEXT , '
+            'PRIMARY KEY (transport_id, character_id)'
+            ')');
+      });
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
   @override
-  Future<bool> addCharacter(SetCharactersRequest setCharactersRequest) async {
+  Future<bool> addCharacters(SetCharactersRequest setCharactersRequest) async {
     try {
       await db.transaction((txn) async {
         final batch = txn.batch();
+        batch.insert(planets, {'planet_id': 'fokushima', 'name': 'fokushima'});
+        batch.insert(transport,
+            {'transport_id': '1234', 'name': 'vehiculo', 'type': 'vehiculo'});
+        batch.insert(transport,
+            {'transport_id': '334', 'name': 'starship', 'type': 'starship'});
         final invaders = setCharactersRequest.toJson();
 
         for (var char in invaders['characters']) {
@@ -118,5 +133,15 @@ class DataBaseProvider extends IDataBaseProvider {
     } catch (e) {
       return [];
     }
+  }
+
+  @override
+  Future<bool> addPlanets(SetPlanetsRequest setPlanetsRequest) async {
+    return true;
+  }
+
+  @override
+  Future<bool> addTransports(SetTransportsRequest setTransportsRequest) async {
+    return true;
   }
 }

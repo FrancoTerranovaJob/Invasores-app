@@ -1,7 +1,11 @@
 import 'package:equatable/equatable.dart';
 
-class TransportsDB extends Equatable {
+class SetTransportsRequest extends Equatable {
+  final String id;
+  final String name;
+
+  const SetTransportsRequest({required this.id, required this.name});
+
   @override
-  // TODO: implement props
-  List<Object?> get props => throw UnimplementedError();
+  List<Object?> get props => [id, name];
 }
