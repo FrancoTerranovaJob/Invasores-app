@@ -31,13 +31,13 @@ void main() async {
           {'results': DataBaseTesting.getTransports()}));
   await KiwiContainer().resolve<IDataBaseProvider>().addCharacters(
       SetCharactersRequest.fromJson(
-          {'results': DataBaseTesting.getCharacters()}));
+          {'results': DataBaseTesting.getCharacters()})); */
   final result = await KiwiContainer()
       .resolve<IDataBaseProvider>()
       .getConsolidatedCharacters();
-  print(result);*/
+  print(result);
 
-  await KiwiContainer().resolve<IRepository>().getCharacters();
+  //await KiwiContainer().resolve<IRepository>().getCharacters();
   runApp(const UberSolution());
 }
 

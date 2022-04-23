@@ -6,7 +6,7 @@ class GetCharactersResponse extends Equatable {
 
   factory GetCharactersResponse.fromJson(Map<String, dynamic> data) {
     final chrResp = <CharacterResponse>[];
-    for (var chr in data['characters']) {
+    for (var chr in data['results']) {
       chrResp.add(CharacterResponse(
           id: chr['url'],
           name: chr['name'],

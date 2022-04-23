@@ -61,14 +61,15 @@ class DataBaseProvider extends IDataBaseProvider {
         final invaders = setCharactersRequest.toJson();
 
         for (var char in invaders['characters']) {
-          batch.insert(
-            character,
-            char['character'],
-          );
-          batch.insert(characterPlanet, char['characterPlanet']);
-          batch.insert(bodyData, char['bodyData']);
+          batch.insert(character, char['character'],
+              conflictAlgorithm: ConflictAlgorithm.replace);
+          batch.insert(characterPlanet, char['characterPlanet'],
+              conflictAlgorithm: ConflictAlgorithm.replace);
+          batch.insert(bodyData, char['bodyData'],
+              conflictAlgorithm: ConflictAlgorithm.replace);
           for (var transports in char['characterTransports']) {
-            batch.insert(characterTransport, transports);
+            batch.insert(characterTransport, transports,
+                conflictAlgorithm: ConflictAlgorithm.replace);
           }
         }
 
@@ -141,7 +142,8 @@ class DataBaseProvider extends IDataBaseProvider {
         final batch = txn.batch();
         final worlds = setPlanetsRequest.toJson();
         for (var pts in worlds['planets']) {
-          batch.insert(planets, pts);
+          batch.insert(planets, pts,
+              conflictAlgorithm: ConflictAlgorithm.replace);
         }
         await batch.commit();
       });
@@ -159,7 +161,8 @@ class DataBaseProvider extends IDataBaseProvider {
         final batch = txn.batch();
         final shipsVls = setTransportsRequest.toJson();
         for (var trs in shipsVls['transport']) {
-          batch.insert(transport, trs);
+          batch.insert(transport, trs,
+              conflictAlgorithm: ConflictAlgorithm.replace);
         }
         await batch.commit();
       });
