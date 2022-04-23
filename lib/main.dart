@@ -36,7 +36,7 @@ void main() async {
       .getConsolidatedCharacters();
   print(result);*/
 
-  await KiwiContainer().resolve<IApiProvider>('OnlineApi').getData();
+  await KiwiContainer().resolve<IApiProvider>().getData();
   runApp(const UberSolution());
 }
 
