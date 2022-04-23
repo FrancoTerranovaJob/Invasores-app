@@ -5,6 +5,7 @@ import 'package:urbe_solution/clean/data/providers/api/i_api_provider.dart';
 import 'package:urbe_solution/clean/data/providers/data_base/models/database_testing.dart';
 import 'package:urbe_solution/clean/data/providers/data_base/models/request/set_planets_request.dart';
 import 'package:urbe_solution/clean/data/providers/data_base/models/request/set_transports_request.dart';
+import 'package:urbe_solution/clean/domain/repository/i_repository.dart';
 import 'package:urbe_solution/clean/presentation/core/welcome_screen.dart';
 import 'package:urbe_solution/modules/database_module.dart';
 import 'package:urbe_solution/modules/preferences_module.dart';
@@ -36,7 +37,7 @@ void main() async {
       .getConsolidatedCharacters();
   print(result);*/
 
-  await KiwiContainer().resolve<IApiProvider>().getData();
+  await KiwiContainer().resolve<IRepository>().getCharacters();
   runApp(const UberSolution());
 }
 

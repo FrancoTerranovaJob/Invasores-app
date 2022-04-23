@@ -1,11 +1,10 @@
 import 'package:equatable/equatable.dart';
 
-class GetConsolidatedCharactersResponse extends Equatable {
+class GetCharactersResponse extends Equatable {
   final List<CharacterResponse> characters;
-  const GetConsolidatedCharactersResponse({required this.characters});
+  const GetCharactersResponse({required this.characters});
 
-  factory GetConsolidatedCharactersResponse.fromJson(
-      Map<String, dynamic> data) {
+  factory GetCharactersResponse.fromJson(Map<String, dynamic> data) {
     final chrResp = <CharacterResponse>[];
     for (var chr in data['characters']) {
       chrResp.add(CharacterResponse(
@@ -21,7 +20,7 @@ class GetConsolidatedCharactersResponse extends Equatable {
           ships: List<String>.from(chr['starships'] as List),
           vehicles: List<String>.from(chr['vehicles'] as List)));
     }
-    return GetConsolidatedCharactersResponse(characters: chrResp);
+    return GetCharactersResponse(characters: chrResp);
   }
   @override
   List<Object?> get props => [characters];

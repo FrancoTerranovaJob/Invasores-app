@@ -11,9 +11,9 @@ class ConfigurationProvider extends IConfigurationProvider {
     final result = preferences.getBool('isOnline');
     if (result == null) {
       preferences.setBool('isOnline', false);
-      return false;
+      return true;
     }
-    return result;
+    return true;
   }
 
   @override
