@@ -7,12 +7,14 @@ class ConsolidatedData extends Equatable {
   final List<Character> characters;
   final List<Planet> planets;
   final List<Transport> transports;
+  final bool isOnline;
 
   ConsolidatedData(
       {required this.characters,
       required this.planets,
-      required this.transports});
+      required this.transports,
+      required this.isOnline});
 
   @override
-  List<Object?> get props => [characters, planets, transports];
+  List<Object?> get props => [characters, planets, transports, isOnline];
 }

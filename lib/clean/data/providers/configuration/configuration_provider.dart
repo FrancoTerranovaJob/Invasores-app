@@ -13,7 +13,7 @@ class ConfigurationProvider extends IConfigurationProvider {
       preferences.setBool('isOnline', false);
       return true;
     }
-    return true;
+    return result;
   }
 
   @override

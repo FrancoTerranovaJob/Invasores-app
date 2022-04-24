@@ -32,12 +32,8 @@ void main() async {
   await KiwiContainer().resolve<IDataBaseProvider>().addCharacters(
       SetCharactersRequest.fromJson(
           {'results': DataBaseTesting.getCharacters()})); */
-  final result = await KiwiContainer()
-      .resolve<IDataBaseProvider>()
-      .getConsolidatedCharacters();
-  print(result);
 
-  //await KiwiContainer().resolve<IRepository>().getCharacters();
+  // await KiwiContainer().resolve<IRepository>().getCharacters();
   runApp(const UberSolution());
 }
 

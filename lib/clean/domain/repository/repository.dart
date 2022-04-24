@@ -22,78 +22,121 @@ class Repository implements IRepository {
   Future<bool> initializeApp() async {
     final isFirstTime = await configuration.getIsFirstTime();
     if (isFirstTime) {
-      return await dbProvider.createDataBase();
+      await dbProvider.createDataBase();
+      await getCharacters();
     }
     return true;
   }
 
   @override
   Future<ConsolidatedData> getCharacters() async {
-    try {
-      if (await configuration.isOnline()) {
-        return await _getOnlineData();
-      } else {
-        return await _getOfflineData();
-      }
-    } catch (e) {
-      return ConsolidatedData(
-          characters: const [], planets: const [], transports: const []);
+    if (await configuration.isOnline()) {
+      return await _getOnlineData();
+    } else {
+      return await _getOfflineData();
     }
   }
 
   Future<ConsolidatedData> _getOnlineData() async {
-    final resultTransports = <Transport>[];
-    final resultCharacters = await apiProvider.getPeople();
+    try {
+      final resultTransports = <Transport>[];
+      final resultCharacters = await apiProvider.getPeople();
 
-    final resultPlanets = await _getAllPlanets();
-    final resultStarships = await _getAllStarships();
-    final resultVehicles = await _getAllVehicles();
-    resultTransports.addAll(resultStarships);
-    resultTransports.addAll(resultVehicles);
+      final resultPlanets = await _getAllPlanets();
+      final resultStarships = await _getAllStarships();
+      final resultVehicles = await _getAllVehicles();
+      resultTransports.addAll(resultStarships);
+      resultTransports.addAll(resultVehicles);
 
-    final charsResponse = <Character>[];
-    for (var chars in resultCharacters.characters) {
-      final planet =
-          resultPlanets.firstWhere((element) => element.id == chars.fromPlanet);
-      final lastName = chars.name.contains(' ')
-          ? chars.name
-              .substring(chars.name.indexOf(' '), chars.name.length)
-              .trim()
-          : '';
-      final name = lastName.isNotEmpty
-          ? chars.name.substring(0, chars.name.indexOf(' '))
-          : chars.name;
-      charsResponse.add(Character(
-          name: name,
-          lastName: lastName,
-          bornOn: chars.bornYear,
-          eyesColor: chars.eyesColor,
-          hairColor: chars.hairColor,
-          height: chars.height,
-          bornPlanet: planet,
-          skinColor: chars.skinColor,
-          gender: chars.gender == 'male'
-              ? GenderType.male
-              : chars.gender == 'female'
-                  ? GenderType.female
-                  : chars.gender == 'unknown'
-                      ? GenderType.unknown
-                      : chars.gender == 'N/A'
-                          ? GenderType.na
-                          : GenderType.unknown,
+      final charsResponse = <Character>[];
+      for (var chars in resultCharacters.characters) {
+        final planet = resultPlanets
+            .firstWhere((element) => element.id == chars.fromPlanet);
+        final lastName = chars.name.contains(' ')
+            ? chars.name
+                .substring(chars.name.indexOf(' '), chars.name.length)
+                .trim()
+            : '';
+        final name = lastName.isNotEmpty
+            ? chars.name.substring(0, chars.name.indexOf(' '))
+            : chars.name;
+        charsResponse.add(Character(
+            name: name,
+            lastName: lastName,
+            bornOn: chars.bornYear,
+            eyesColor: chars.eyesColor,
+            hairColor: chars.hairColor,
+            height: chars.height,
+            bornPlanet: planet,
+            skinColor: chars.skinColor,
+            gender: chars.gender == 'male'
+                ? GenderType.male
+                : chars.gender == 'female'
+                    ? GenderType.female
+                    : chars.gender == 'unknown'
+                        ? GenderType.unknown
+                        : chars.gender == 'N/A'
+                            ? GenderType.na
+                            : GenderType.unknown,
+            transports: const [],
+            id: chars.id));
+      }
+      final consData = ConsolidatedData(
+          characters: charsResponse,
+          planets: resultPlanets,
+          transports: resultTransports,
+          isOnline: true);
+      await _addDataToDataBase(consData);
+      return consData;
+    } catch (e) {
+      return ConsolidatedData(
+          characters: const [],
+          planets: const [],
           transports: const [],
-          id: chars.id));
+          isOnline: true);
     }
-    final consData = ConsolidatedData(
-        characters: charsResponse,
-        planets: resultPlanets,
-        transports: resultTransports);
-    _addDataToDataBase(consData);
-    return consData;
   }
 
   Future<ConsolidatedData> _getOfflineData() async {
-    return ConsolidatedData(characters: [], planets: [], transports: []);
+    try {
+      final characters = <Character>[];
+      final response = await dbProvider.getConsolidatedCharacters();
+
+      for (var chars in response.characters) {
+        characters.add(Character(
+            id: chars.id,
+            name: chars.name,
+            lastName: '',
+            bornOn: chars.bornYear,
+            eyesColor: chars.eyesColor,
+            hairColor: chars.hairColor,
+            height: chars.height,
+            bornPlanet: Planet(name: chars.fromPlanet, id: ''),
+            skinColor: chars.skinColor,
+            gender: chars.gender == 'male'
+                ? GenderType.male
+                : chars.gender == 'female'
+                    ? GenderType.female
+                    : chars.gender == 'unknown'
+                        ? GenderType.unknown
+                        : chars.gender == 'N/A'
+                            ? GenderType.na
+                            : GenderType.unknown,
+            transports: List.from(chars.transports.transport.map((e) {
+              Transport(
+                  name: e.name,
+                  type: e.type == 'VEHICLE'
+                      ? TransportType.vehicle
+                      : TransportType.starship,
+                  id: '');
+            }).toList())));
+      }
+      return ConsolidatedData(
+          characters: characters, planets: [], transports: [], isOnline: false);
+    } catch (e) {
+      return ConsolidatedData(
+          characters: [], planets: [], transports: [], isOnline: false);
+    }
   }
 
   Future<void> _addDataToDataBase(ConsolidatedData characters) async {
