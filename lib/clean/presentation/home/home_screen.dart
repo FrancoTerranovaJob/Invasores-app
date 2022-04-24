@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:urbe_solution/clean/presentation/core/pages/splash_content.dart';
 import 'package:urbe_solution/clean/presentation/home/bloc/home_bloc.dart';
 
 import 'home_content.dart';

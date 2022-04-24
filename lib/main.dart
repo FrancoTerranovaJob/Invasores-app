@@ -24,16 +24,6 @@ void main() async {
   await RepositoryModule.repositoryInitialize();
   await UseCaseModule.useCaseInitialize();
 
-/*  await KiwiContainer().resolve<IDataBaseProvider>().addPlanets(
-      SetPlanetsRequest.fromJson({'results': DataBaseTesting.getPlanets()}));
-  await KiwiContainer().resolve<IDataBaseProvider>().addTransports(
-      SetTransportsRequest.fromJson(
-          {'results': DataBaseTesting.getTransports()}));
-  await KiwiContainer().resolve<IDataBaseProvider>().addCharacters(
-      SetCharactersRequest.fromJson(
-          {'results': DataBaseTesting.getCharacters()})); */
-
-  // await KiwiContainer().resolve<IRepository>().getCharacters();
   runApp(const UberSolution());
 }
 

@@ -16,18 +16,20 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc()
       : super(HomeInitial(
             data: ConsolidatedData(
-                characters: [],
-                planets: [],
-                transports: [],
-                isOnline: false))) {
+                characters: [], planets: [], transports: [], isOnline: false),
+            showDrawer: false)) {
     on<LoadDataEvent>((event, emit) async {
-      emit(LoadingState(data: state.data));
+      emit(LoadingState(data: state.data, showDrawer: state.showDrawer));
       final result = await getData.call();
       if (isValidData.call(result)) {
-        emit(DataState(data: result));
+        emit(DataState(data: result, showDrawer: state.showDrawer));
       } else {
-        emit(ErrorState(data: state.data));
+        emit(ErrorState(data: state.data, showDrawer: state.showDrawer));
       }
+    });
+
+    on<ShowDrawerEvent>((event, emit) {
+      emit(ShowDrawerState(data: state.data, showDrawer: true));
     });
   }
 }

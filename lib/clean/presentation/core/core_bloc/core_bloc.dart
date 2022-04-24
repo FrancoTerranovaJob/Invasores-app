@@ -10,7 +10,7 @@ class CoreBloc extends Bloc<CoreEvent, CoreState> {
   final initializeUseCase = KiwiContainer().resolve<InitializeAppUseCase>();
   CoreBloc() : super(CoreInitial()) {
     on<InitializeAppEvent>((event, emit) async {
-      emit(InitializedAppState());
+      emit(InitializeAppState());
       await initializeUseCase.call();
 
       add(InitializedAppEvent());

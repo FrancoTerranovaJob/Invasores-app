@@ -8,3 +8,8 @@ class LoadDataEvent extends HomeEvent {
   @override
   List<Object?> get props => [];
 }
+
+class ShowDrawerEvent extends HomeEvent {
+  @override
+  List<Object?> get props => [];
+}
