@@ -22,6 +22,7 @@ class GetConsolidatedCharacters extends Equatable {
     }
     return GetConsolidatedCharacters(characters: chrResp);
   }
+
   @override
   List<Object?> get props => [characters];
 }

@@ -12,6 +12,7 @@ class CoreBloc extends Bloc<CoreEvent, CoreState> {
     on<InitializeAppEvent>((event, emit) async {
       emit(InitializedAppState());
       await initializeUseCase.call();
+
       add(InitializedAppEvent());
     });
     on<InitializedAppEvent>((event, emit) async {
