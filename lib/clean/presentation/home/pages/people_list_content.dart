@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
 import 'package:urbe_solution/clean/domain/entities/character.dart';
+import 'package:urbe_solution/clean/presentation/home/bloc/home_bloc.dart';
 
 import '../../../../theme/app_theme.dart';
 import '../../../../widgets/people_card/people_card.dart';

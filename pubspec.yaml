@@ -41,6 +41,7 @@ flutter:
     - assets/progress/
     - assets/progress/progress_app.json
 
+
   fonts:
     - family: Raleway
       fonts:

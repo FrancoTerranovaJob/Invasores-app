@@ -129,7 +129,8 @@ class Repository implements IRepository {
                   type: e.type == 'VEHICLE'
                       ? TransportType.vehicle
                       : TransportType.starship,
-                  id: '');
+                  id: '',
+                  pilotsId: []);
             }).toList())));
       }
       return ConsolidatedData(
@@ -171,13 +172,15 @@ class Repository implements IRepository {
     final vehiclesList = <VehicleResponse>[];
     var resultVehicles = await apiProvider.getVehicles();
     for (var veh in resultVehicles.vehicles) {
-      vehiclesList.add(VehicleResponse(name: veh.name, id: veh.id));
+      vehiclesList.add(
+          VehicleResponse(name: veh.name, id: veh.id, pilotsId: veh.pilotsId));
     }
     while (resultVehicles.nextPageUrl != null) {
       resultVehicles = await apiProvider.getVehicles(
           nextPageUrl: resultVehicles.nextPageUrl);
       for (var veh in resultVehicles.vehicles) {
-        vehiclesList.add(VehicleResponse(name: veh.name, id: veh.id));
+        vehiclesList.add(VehicleResponse(
+            name: veh.name, id: veh.id, pilotsId: veh.pilotsId));
       }
     }
     return GetVehiclesResponse(vehicles: vehiclesList, nextPageUrl: null);
@@ -187,13 +190,15 @@ class Repository implements IRepository {
     final starShipsList = <StarShipResponse>[];
     var resultStarships = await apiProvider.getStarships();
     for (var str in resultStarships.starships) {
-      starShipsList.add(StarShipResponse(name: str.name, id: str.id));
+      starShipsList.add(
+          StarShipResponse(name: str.name, id: str.id, pilotsId: str.pilotsId));
     }
     while (resultStarships.nextPageUrl != null) {
       resultStarships = await apiProvider.getStarships(
           nextPageUrl: resultStarships.nextPageUrl);
-      for (var veh in resultStarships.starships) {
-        starShipsList.add(StarShipResponse(name: veh.name, id: veh.id));
+      for (var str in resultStarships.starships) {
+        starShipsList.add(StarShipResponse(
+            name: str.name, id: str.id, pilotsId: str.pilotsId));
       }
     }
     return GetStarShipsResponse(starships: starShipsList, nextPageUrl: null);
@@ -242,7 +247,7 @@ class Repository implements IRepository {
         eyesColor: chars.eyesColor,
         hairColor: chars.hairColor,
         height: chars.height,
-        bornPlanet: Planet(name: '', id: ''),
+        bornPlanet: Planet(name: '', id: chars.fromPlanet),
         skinColor: chars.skinColor,
         gender: chars.gender == 'male'
             ? GenderType.male
@@ -253,7 +258,7 @@ class Repository implements IRepository {
                     : chars.gender == 'none'
                         ? GenderType.na
                         : GenderType.unknown,
-        transports: const [],
+        transports: [],
         id: chars.id);
   }
 
@@ -271,7 +276,10 @@ class Repository implements IRepository {
 
   Transport _getVehicleResponse(VehicleResponse trnsp) {
     return Transport(
-        id: trnsp.id, name: trnsp.name, type: TransportType.vehicle);
+        id: trnsp.id,
+        name: trnsp.name,
+        type: TransportType.vehicle,
+        pilotsId: trnsp.pilotsId);
   }
 
   TransportsDB _getShipsResponseDB(StarShipResponse trnsp) {
@@ -280,25 +288,17 @@ class Repository implements IRepository {
 
   Transport _getShipsResponse(StarShipResponse trnsp) {
     return Transport(
-        id: trnsp.id, name: trnsp.name, type: TransportType.starship);
+        id: trnsp.id,
+        name: trnsp.name,
+        type: TransportType.starship,
+        pilotsId: trnsp.pilotsId);
   }
 
   Future<GetCharactersResponse> _getAllPeople() async {
     final peoples = <CharacterResponse>[];
     var pplResult = await apiProvider.getPeople();
     for (var ppl in pplResult.characters) {
-      peoples.add(CharacterResponse(
-          id: ppl.id,
-          name: ppl.name,
-          eyesColor: ppl.eyesColor,
-          hairColor: ppl.hairColor,
-          height: ppl.height,
-          skinColor: ppl.skinColor,
-          gender: ppl.gender,
-          fromPlanet: ppl.fromPlanet,
-          bornYear: ppl.bornYear,
-          ships: ppl.ships,
-          vehicles: ppl.vehicles));
+      peoples.add(ppl);
     }
     while (pplResult.nextPageUrl != null) {
       pplResult =
@@ -318,6 +318,17 @@ class Repository implements IRepository {
             vehicles: ppl.vehicles));
       }
     }
-    return GetCharactersResponse(characters: peoples, nextPageUrl: null);
+    return GetCharactersResponse(
+        characters: peoples, nextPageUrl: pplResult.nextPageUrl);
+  }
+
+  @override
+  Future<List<Character>> getMorePeople(String nextPageUrl) async {
+    final pplList = <Character>[];
+    var pplResult = await apiProvider.getPeople(nextPageUrl: nextPageUrl);
+    for (var ppl in pplResult.characters) {
+      pplList.add(_getCharResponse(ppl));
+    }
+    return pplList;
   }
 }

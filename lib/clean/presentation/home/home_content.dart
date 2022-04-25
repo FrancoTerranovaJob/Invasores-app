@@ -8,6 +8,8 @@ import 'package:urbe_solution/clean/presentation/home/pages/people_list_content.
 import 'package:urbe_solution/clean/presentation/home/pages/progress_content.dart';
 import 'package:urbe_solution/widgets/dialog/view_dialog.dart';
 
+import '../../../theme/app_theme.dart';
+
 class HomeContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -51,24 +53,65 @@ class HomeContent extends StatelessWidget {
         BlocProvider.of<HomeBloc>(context).add(SyncDataEvent());
       }),
       body: SafeArea(
-        child: BlocBuilder<HomeBloc, HomeState>(
-            buildWhen: (p, c) =>
-                (c is LoadingState || c is DataState || c is ErrorState),
-            builder: (bContext, state) {
-              if (state is LoadingState) {
-                return ProgressPage();
-              } else if (state is DataState) {
-                return PeopleListContent(people: state.data.characters);
-              } else if (state is ErrorState) {
-                return Container(
-                  color: Colors.purple,
+        child: Stack(
+          children: [
+            BlocBuilder<HomeBloc, HomeState>(
+                buildWhen: (p, c) =>
+                    (c is LoadingState || c is DataState || c is ErrorState),
+                builder: (bContext, state) {
+                  if (state is LoadingState) {
+                    return ProgressPage();
+                  } else if (state is DataState) {
+                    return PeopleListContent(people: state.data.characters);
+                  } else if (state is ErrorState) {
+                    return Container(
+                      color: Colors.purple,
+                    );
+                  } else {
+                    return Container(
+                      color: Colors.blue,
+                    );
+                  }
+                }),
+            BlocBuilder<HomeBloc, HomeState>(
+              builder: (context, state) {
+                return Align(
+                  alignment: Alignment.bottomCenter,
+                  child: SizedBox(
+                      height: 50,
+                      child: Container(
+                          color: Themes.mainTheme(context).colorScheme.primary,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.adjust_rounded,
+                                  color: state.isOnline
+                                      ? Colors.red
+                                      : Colors.green,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    state.isOnline ? 'Online' : 'Offline',
+                                    style: Themes.mainTheme(context)
+                                        .textTheme
+                                        .subtitle1!
+                                        .copyWith(
+                                            color: Themes.mainTheme(context)
+                                                .colorScheme
+                                                .onBackground),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ))),
                 );
-              } else {
-                return Container(
-                  color: Colors.blue,
-                );
-              }
-            }),
+              },
+            )
+          ],
+        ),
       ),
     );
   }
