@@ -14,6 +14,7 @@ class LateralDrawerBloc extends Bloc<LateralDrawerEvent, LateralDrawerState> {
           isOnline: state.isOnline,
           syncEnabled: state.syncEnabled,
           syncPressed: true));
+      emit(IdleState(isOnline: state.isOnline, syncEnabled: state.syncEnabled));
     });
     on<ChangeModeEvent>((event, emit) {
       emit(NotifyState(
@@ -21,6 +22,7 @@ class LateralDrawerBloc extends Bloc<LateralDrawerEvent, LateralDrawerState> {
           syncEnabled: !state.syncEnabled,
           syncPressed: false,
           modeChanged: true));
+      emit(IdleState(isOnline: state.isOnline, syncEnabled: state.syncEnabled));
     });
   }
 }

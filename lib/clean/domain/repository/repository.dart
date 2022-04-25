@@ -27,6 +27,7 @@ class Repository implements IRepository {
     if (isFirstTime) {
       await dbProvider.createDataBase();
       await getConsolidatedData();
+      await configuration.setIsFirstTime(false);
     }
     return true;
   }
@@ -118,7 +119,7 @@ class Repository implements IRepository {
                     ? GenderType.female
                     : chars.gender == 'unknown'
                         ? GenderType.unknown
-                        : chars.gender == 'N/A'
+                        : chars.gender == 'none'
                             ? GenderType.na
                             : GenderType.unknown,
             transports:
@@ -249,7 +250,7 @@ class Repository implements IRepository {
                 ? GenderType.female
                 : chars.gender == 'unknown'
                     ? GenderType.unknown
-                    : chars.gender == 'N/A'
+                    : chars.gender == 'none'
                         ? GenderType.na
                         : GenderType.unknown,
         transports: const [],

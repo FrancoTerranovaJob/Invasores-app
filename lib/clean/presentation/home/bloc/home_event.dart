@@ -13,3 +13,13 @@ class ShowDrawerEvent extends HomeEvent {
   @override
   List<Object?> get props => [];
 }
+
+class SyncDataEvent extends HomeEvent {
+  @override
+  List<Object?> get props => [];
+}
+
+class ChangeModeEvent extends HomeEvent {
+  @override
+  List<Object?> get props => [];
+}

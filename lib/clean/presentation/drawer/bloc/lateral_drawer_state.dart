@@ -25,3 +25,14 @@ class NotifyState extends LateralDrawerState {
       this.syncPressed = false})
       : super(isOnline: isOnline, syncEnabled: syncEnabled);
 }
+
+class IdleState extends LateralDrawerState {
+  final bool syncPressed;
+  final bool modeChanged;
+  const IdleState(
+      {required bool isOnline,
+      required bool syncEnabled,
+      this.modeChanged = false,
+      this.syncPressed = false})
+      : super(isOnline: isOnline, syncEnabled: syncEnabled);
+}
