@@ -6,7 +6,7 @@ abstract class HomeState extends Equatable {
 
   const HomeState({required this.data, required this.showDrawer});
   @override
-  List<Object> get props => [data];
+  List<Object> get props => [data, showDrawer];
 }
 
 class HomeInitial extends HomeState {

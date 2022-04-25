@@ -1,6 +1,9 @@
 import 'package:kiwi/kiwi.dart';
 import 'package:urbe_solution/clean/data/providers/api/i_api_provider.dart';
 import 'package:urbe_solution/clean/data/providers/api/response/get_characters_response.dart';
+import 'package:urbe_solution/clean/data/providers/api/response/get_planets_response.dart';
+import 'package:urbe_solution/clean/data/providers/api/response/get_starships_response.dart';
+import 'package:urbe_solution/clean/data/providers/api/response/get_vehicles_response.dart';
 import 'package:urbe_solution/clean/data/providers/data_base/i_data_base_provider.dart';
 import 'package:urbe_solution/clean/data/providers/data_base/models/request/set_characters_request.dart';
 import 'package:urbe_solution/clean/data/providers/data_base/models/request/set_planets_request.dart';
@@ -23,13 +26,13 @@ class Repository implements IRepository {
     final isFirstTime = await configuration.getIsFirstTime();
     if (isFirstTime) {
       await dbProvider.createDataBase();
-      await getCharacters();
+      await getConsolidatedData();
     }
     return true;
   }
 
   @override
-  Future<ConsolidatedData> getCharacters() async {
+  Future<ConsolidatedData> getConsolidatedData() async {
     if (await configuration.isOnline()) {
       return await _getOnlineData();
     } else {
@@ -39,54 +42,50 @@ class Repository implements IRepository {
 
   Future<ConsolidatedData> _getOnlineData() async {
     try {
-      final resultTransports = <Transport>[];
-      final resultCharacters = await apiProvider.getPeople();
+      final result = await Future.wait([
+        _getAllPeople(),
+        _getAllPlanets(),
+        _getAllStarships(),
+        _getAllVehicles()
+      ]);
 
-      final resultPlanets = await _getAllPlanets();
-      final resultStarships = await _getAllStarships();
-      final resultVehicles = await _getAllVehicles();
-      resultTransports.addAll(resultStarships);
-      resultTransports.addAll(resultVehicles);
+      final resultCharacters = result[0] as GetCharactersResponse;
+
+      final resultPlanets = result[1] as GetPlanetsResponse;
+      final resultStarships = result[2] as GetStarShipsResponse;
+      final resultVehicles = result[3] as GetVehiclesResponse;
 
       final charsResponse = <Character>[];
+      final charsResponseDB = <CharactersDB>[];
+      final plntsResponse = <Planet>[];
+      final plntsResponseDB = <PlanetDB>[];
+      final transportResponse = <Transport>[];
+      final transportResponseDB = <TransportsDB>[];
+
       for (var chars in resultCharacters.characters) {
-        final planet = resultPlanets
-            .firstWhere((element) => element.id == chars.fromPlanet);
-        final lastName = chars.name.contains(' ')
-            ? chars.name
-                .substring(chars.name.indexOf(' '), chars.name.length)
-                .trim()
-            : '';
-        final name = lastName.isNotEmpty
-            ? chars.name.substring(0, chars.name.indexOf(' '))
-            : chars.name;
-        charsResponse.add(Character(
-            name: name,
-            lastName: lastName,
-            bornOn: chars.bornYear,
-            eyesColor: chars.eyesColor,
-            hairColor: chars.hairColor,
-            height: chars.height,
-            bornPlanet: planet,
-            skinColor: chars.skinColor,
-            gender: chars.gender == 'male'
-                ? GenderType.male
-                : chars.gender == 'female'
-                    ? GenderType.female
-                    : chars.gender == 'unknown'
-                        ? GenderType.unknown
-                        : chars.gender == 'N/A'
-                            ? GenderType.na
-                            : GenderType.unknown,
-            transports: const [],
-            id: chars.id));
+        charsResponse.add(_getCharResponse(chars));
+        charsResponseDB.add(_getCharResponseDB(chars));
       }
+      for (var plnts in resultPlanets.planets) {
+        plntsResponse.add(_getPlanetResponse(plnts));
+        plntsResponseDB.add(_getPlanetResponseDB(plnts));
+      }
+      for (var trnsp in resultVehicles.vehicles) {
+        transportResponse.add(_getVehicleResponse(trnsp));
+        transportResponseDB.add(_getVehicleResponseDB(trnsp));
+      }
+      for (var trnsp in resultStarships.starships) {
+        transportResponse.add(_getShipsResponse(trnsp));
+        transportResponseDB.add(_getShipsResponseDB(trnsp));
+      }
+
       final consData = ConsolidatedData(
           characters: charsResponse,
-          planets: resultPlanets,
-          transports: resultTransports,
+          planets: plntsResponse,
+          transports: transportResponse,
           isOnline: true);
-      await _addDataToDataBase(consData);
+      await _addDataToDataBase(
+          transportResponseDB, plntsResponseDB, charsResponseDB);
       return consData;
     } catch (e) {
       return ConsolidatedData(
@@ -122,8 +121,9 @@ class Repository implements IRepository {
                         : chars.gender == 'N/A'
                             ? GenderType.na
                             : GenderType.unknown,
-            transports: List.from(chars.transports.transport.map((e) {
-              Transport(
+            transports:
+                List<Transport>.from(chars.transports.transport.map((e) {
+              return Transport(
                   name: e.name,
                   type: e.type == 'VEHICLE'
                       ? TransportType.vehicle
@@ -139,104 +139,184 @@ class Repository implements IRepository {
     }
   }
 
-  Future<void> _addDataToDataBase(ConsolidatedData characters) async {
+  Future<void> _addDataToDataBase(List<TransportsDB> transports,
+      List<PlanetDB> planets, List<CharactersDB> charts) async {
     try {
-      final planets = <PlanetDB>[];
-      final transports = <TransportsDB>[];
-      final charts = <CharactersDB>[];
-      for (var plnts in characters.planets) {
-        planets.add(PlanetDB(name: plnts.name, id: plnts.id));
-      }
-      for (var trnsp in characters.transports) {
-        transports.add(TransportsDB(
-            id: trnsp.id,
-            name: trnsp.name,
-            type:
-                trnsp.type == TransportType.starship ? 'STARSHIP' : 'VEHICLE'));
-      }
       await dbProvider
           .addTransports(SetTransportsRequest(transport: transports));
       await dbProvider.addPlanets(SetPlanetsRequest(planets: planets));
-
-      for (var chrs in characters.characters) {
-        final List<String> vehicles = List.from(chrs.transports
-            .where((element) => element.type == TransportType.vehicle));
-        final List<String> starships = List.from(chrs.transports
-            .where((element) => element.type == TransportType.starship));
-        charts.add(CharactersDB(
-            id: chrs.id,
-            name: chrs.name,
-            eyesColor: chrs.eyesColor,
-            hairColor: chrs.hairColor,
-            height: chrs.height,
-            skinColor: chrs.skinColor,
-            gender: chrs.gender == GenderType.male
-                ? 'male'
-                : chrs.gender == GenderType.female
-                    ? 'female'
-                    : chrs.gender == GenderType.unknown
-                        ? 'unknown'
-                        : chrs.gender == GenderType.na
-                            ? 'N/A'
-                            : 'unknown',
-            fromPlanetId: chrs.bornPlanet.id,
-            bornYear: chrs.bornOn,
-            vehiclesId: vehicles.map((e) => e).toList(),
-            starShipsId: starships.map((e) => e).toList()));
-      }
       await dbProvider.addCharacters(SetCharactersRequest(characters: charts));
     } catch (_) {}
   }
 
-  Future<List<Planet>> _getAllPlanets() async {
-    final planetsList = <Planet>[];
+  Future<GetPlanetsResponse> _getAllPlanets() async {
+    final planetsList = <PlanetResponse>[];
     var resultPlanets = await apiProvider.getPlanets();
     for (var plnts in resultPlanets.planets) {
-      planetsList.add(Planet(name: plnts.name, id: plnts.id));
+      planetsList.add(PlanetResponse(name: plnts.name, id: plnts.id));
     }
     while (resultPlanets.nextPageUrl != null) {
       resultPlanets =
           await apiProvider.getPlanets(nextPageUrl: resultPlanets.nextPageUrl);
       for (var plnts in resultPlanets.planets) {
-        planetsList.add(Planet(name: plnts.name, id: plnts.id));
+        planetsList.add(PlanetResponse(name: plnts.name, id: plnts.id));
       }
     }
-    return planetsList;
+
+    return GetPlanetsResponse(planets: planetsList, nextPageUrl: null);
   }
 
-  Future<List<Transport>> _getAllVehicles() async {
-    final vehiclesList = <Transport>[];
+  Future<GetVehiclesResponse> _getAllVehicles() async {
+    final vehiclesList = <VehicleResponse>[];
     var resultVehicles = await apiProvider.getVehicles();
     for (var veh in resultVehicles.vehicles) {
-      vehiclesList.add(
-          Transport(name: veh.name, type: TransportType.vehicle, id: veh.id));
+      vehiclesList.add(VehicleResponse(name: veh.name, id: veh.id));
     }
     while (resultVehicles.nextPageUrl != null) {
       resultVehicles = await apiProvider.getVehicles(
           nextPageUrl: resultVehicles.nextPageUrl);
       for (var veh in resultVehicles.vehicles) {
-        vehiclesList.add(
-            Transport(name: veh.name, type: TransportType.vehicle, id: veh.id));
+        vehiclesList.add(VehicleResponse(name: veh.name, id: veh.id));
       }
     }
-    return vehiclesList;
+    return GetVehiclesResponse(vehicles: vehiclesList, nextPageUrl: null);
   }
 
-  Future<List<Transport>> _getAllStarships() async {
-    final starShipsList = <Transport>[];
+  Future<GetStarShipsResponse> _getAllStarships() async {
+    final starShipsList = <StarShipResponse>[];
     var resultStarships = await apiProvider.getStarships();
     for (var str in resultStarships.starships) {
-      starShipsList.add(
-          Transport(name: str.name, type: TransportType.starship, id: str.id));
+      starShipsList.add(StarShipResponse(name: str.name, id: str.id));
     }
     while (resultStarships.nextPageUrl != null) {
       resultStarships = await apiProvider.getStarships(
           nextPageUrl: resultStarships.nextPageUrl);
       for (var veh in resultStarships.starships) {
-        starShipsList.add(
-            Transport(name: veh.name, type: TransportType.vehicle, id: veh.id));
+        starShipsList.add(StarShipResponse(name: veh.name, id: veh.id));
       }
     }
-    return starShipsList;
+    return GetStarShipsResponse(starships: starShipsList, nextPageUrl: null);
+  }
+
+  @override
+  Future<bool> enableOnline() async {
+    return await configuration.setIsOnline(true);
+  }
+
+  @override
+  Future<ConsolidatedData> syncData() async {
+    return await getConsolidatedData();
+  }
+
+  @override
+  Future<bool> disableOnline() async {
+    return await configuration.setIsOnline(false);
+  }
+
+  @override
+  Future<bool> getIsOnline() async {
+    return await configuration.isOnline();
+  }
+
+  CharactersDB _getCharResponseDB(CharacterResponse chrs) {
+    return CharactersDB(
+        id: chrs.id,
+        name: chrs.name,
+        eyesColor: chrs.eyesColor,
+        hairColor: chrs.hairColor,
+        height: chrs.height,
+        skinColor: chrs.skinColor,
+        gender: chrs.gender,
+        fromPlanetId: chrs.fromPlanet,
+        bornYear: chrs.bornYear,
+        vehiclesId: chrs.vehicles,
+        starShipsId: chrs.ships);
+  }
+
+  Character _getCharResponse(CharacterResponse chars) {
+    return Character(
+        name: chars.name,
+        lastName: '',
+        bornOn: chars.bornYear,
+        eyesColor: chars.eyesColor,
+        hairColor: chars.hairColor,
+        height: chars.height,
+        bornPlanet: Planet(name: '', id: ''),
+        skinColor: chars.skinColor,
+        gender: chars.gender == 'male'
+            ? GenderType.male
+            : chars.gender == 'female'
+                ? GenderType.female
+                : chars.gender == 'unknown'
+                    ? GenderType.unknown
+                    : chars.gender == 'N/A'
+                        ? GenderType.na
+                        : GenderType.unknown,
+        transports: const [],
+        id: chars.id);
+  }
+
+  PlanetDB _getPlanetResponseDB(PlanetResponse plnts) {
+    return PlanetDB(name: plnts.name, id: plnts.id);
+  }
+
+  Planet _getPlanetResponse(PlanetResponse plnts) {
+    return Planet(name: plnts.name, id: plnts.id);
+  }
+
+  TransportsDB _getVehicleResponseDB(VehicleResponse trnsp) {
+    return TransportsDB(id: trnsp.id, name: trnsp.name, type: 'VEHICLE');
+  }
+
+  Transport _getVehicleResponse(VehicleResponse trnsp) {
+    return Transport(
+        id: trnsp.id, name: trnsp.name, type: TransportType.vehicle);
+  }
+
+  TransportsDB _getShipsResponseDB(StarShipResponse trnsp) {
+    return TransportsDB(id: trnsp.id, name: trnsp.name, type: 'STARSHIP');
+  }
+
+  Transport _getShipsResponse(StarShipResponse trnsp) {
+    return Transport(
+        id: trnsp.id, name: trnsp.name, type: TransportType.starship);
+  }
+
+  Future<GetCharactersResponse> _getAllPeople() async {
+    final peoples = <CharacterResponse>[];
+    var pplResult = await apiProvider.getPeople();
+    for (var ppl in pplResult.characters) {
+      peoples.add(CharacterResponse(
+          id: ppl.id,
+          name: ppl.name,
+          eyesColor: ppl.eyesColor,
+          hairColor: ppl.hairColor,
+          height: ppl.height,
+          skinColor: ppl.skinColor,
+          gender: ppl.gender,
+          fromPlanet: ppl.fromPlanet,
+          bornYear: ppl.bornYear,
+          ships: ppl.ships,
+          vehicles: ppl.vehicles));
+    }
+    while (pplResult.nextPageUrl != null) {
+      pplResult =
+          await apiProvider.getPeople(nextPageUrl: pplResult.nextPageUrl);
+      for (var ppl in pplResult.characters) {
+        peoples.add(CharacterResponse(
+            id: ppl.id,
+            name: ppl.name,
+            eyesColor: ppl.eyesColor,
+            hairColor: ppl.hairColor,
+            height: ppl.height,
+            skinColor: ppl.skinColor,
+            gender: ppl.gender,
+            fromPlanet: ppl.fromPlanet,
+            bornYear: ppl.bornYear,
+            ships: ppl.ships,
+            vehicles: ppl.vehicles));
+      }
+    }
+    return GetCharactersResponse(characters: peoples, nextPageUrl: null);
   }
 }

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:urbe_solution/clean/presentation/drawer/lateral_drawer_screen.dart';
 import 'package:urbe_solution/clean/presentation/home/bloc/home_bloc.dart';
 import 'package:urbe_solution/clean/presentation/home/pages/progress_content.dart';
 import 'package:urbe_solution/widgets/people_card/people_card.dart';
 import 'package:urbe_solution/widgets/progress/progress.dart';
 
+import '../../../theme/app_theme.dart';
 import '../../domain/entities/character.dart';
 
 class HomeContent extends StatelessWidget {
@@ -19,9 +21,8 @@ class HomeContent extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Color(0xFF2E4558),
       ),
-      drawer: const Drawer(
-        backgroundColor: Colors.white,
-      ),
+      drawer:
+          LateralDrawerScreen(onModeChanged: (value) {}, onSyncPressed: () {}),
       body: SafeArea(
         child: BlocBuilder<HomeBloc, HomeState>(
             buildWhen: (p, c) =>
@@ -41,12 +42,13 @@ class HomeContent extends StatelessWidget {
                       },
                       body: (char) {
                         return Container(
-                          color: Color(0xFFE89E10),
+                          color:
+                              Themes.mainTheme(context).colorScheme.onPrimary,
                         );
                       });
                 });
                 return Container(
-                  color: Color(0xFF2E4558),
+                  color: Themes.mainTheme(context).colorScheme.primary,
                   child: Column(
                     children: [
                       Expanded(

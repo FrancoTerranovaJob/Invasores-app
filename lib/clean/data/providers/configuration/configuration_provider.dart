@@ -18,8 +18,12 @@ class ConfigurationProvider extends IConfigurationProvider {
 
   @override
   Future<bool> setIsOnline(bool isOnline) async {
-    await preferences.setBool('isOnline', isOnline);
-    return true;
+    try {
+      await preferences.setBool('isOnline', isOnline);
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
   @override
