@@ -7,7 +7,10 @@ class GetStarShipsResponse extends Equatable {
   factory GetStarShipsResponse.fromJson(Map<String, dynamic> data) {
     final strships = <StarShipResponse>[];
     for (var star in data['results']) {
-      strships.add(StarShipResponse(id: star['url'], name: star['name']));
+      strships.add(StarShipResponse(
+          id: star['url'],
+          name: star['name'],
+          pilotsId: List<String>.from(star['pilots'] as List)));
     }
     return GetStarShipsResponse(starships: strships, nextPageUrl: data['next']);
   }
@@ -21,9 +24,11 @@ class GetStarShipsResponse extends Equatable {
 class StarShipResponse extends Equatable {
   final String id;
   final String name;
+  final List<String> pilotsId;
 
-  StarShipResponse({required this.id, required this.name});
+  StarShipResponse(
+      {required this.id, required this.name, required this.pilotsId});
 
   @override
-  List<Object?> get props => [id, name];
+  List<Object?> get props => [id, name, pilotsId];
 }

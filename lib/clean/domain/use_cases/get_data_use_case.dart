@@ -6,6 +6,6 @@ import '../repository/i_repository.dart';
 class GetDataUseCase {
   final repository = KiwiContainer().resolve<IRepository>();
   Future<ConsolidatedData> call() async {
-    return await repository.getCharacters();
+    return await repository.getConsolidatedData();
   }
 }

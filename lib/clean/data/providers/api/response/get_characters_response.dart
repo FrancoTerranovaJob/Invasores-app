@@ -2,7 +2,9 @@ import 'package:equatable/equatable.dart';
 
 class GetCharactersResponse extends Equatable {
   final List<CharacterResponse> characters;
-  const GetCharactersResponse({required this.characters});
+  final String? nextPageUrl;
+  const GetCharactersResponse(
+      {required this.characters, required this.nextPageUrl});
 
   factory GetCharactersResponse.fromJson(Map<String, dynamic> data) {
     final chrResp = <CharacterResponse>[];
@@ -20,7 +22,9 @@ class GetCharactersResponse extends Equatable {
           ships: List<String>.from(chr['starships'] as List),
           vehicles: List<String>.from(chr['vehicles'] as List)));
     }
-    return GetCharactersResponse(characters: chrResp);
+
+    return GetCharactersResponse(
+        characters: chrResp, nextPageUrl: data['next']);
   }
   @override
   List<Object?> get props => [characters];
