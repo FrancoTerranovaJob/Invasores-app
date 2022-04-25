@@ -53,40 +53,57 @@ class LateralDrawerContent extends StatelessWidget {
                     )),
                   ),
                 ),
-                ListTile(
-                  leading: Icon(
-                    Icons.signal_wifi_4_bar_rounded,
-                    color: Themes.mainTheme(context).colorScheme.background,
-                  ),
-                  title: Text(
-                    'Modo online',
-                    style: Themes.mainTheme(context).textTheme.headline2,
-                  ),
-                  trailing: BlocBuilder<LateralDrawerBloc, LateralDrawerState>(
+                BlocBuilder<LateralDrawerBloc, LateralDrawerState>(
                     builder: (context, state) {
-                      return Switch(
+                  return ListTile(
+                      enabled: state.isOnline,
+                      leading: Icon(
+                        Icons.signal_wifi_4_bar_rounded,
+                        color: state.isOnline
+                            ? Themes.mainTheme(context).colorScheme.background
+                            : Themes.mainTheme(context)
+                                .colorScheme
+                                .background
+                                .withOpacity(0.25),
+                      ),
+                      title: Text(
+                        'Modo online',
+                        style: Themes.mainTheme(context).textTheme.headline2,
+                      ),
+                      trailing: Switch(
                           activeColor: Themes.mainTheme(context)
                               .colorScheme
                               .onBackground,
                           value: state.isOnline,
                           onChanged: (value) {
                             BlocProvider.of<LateralDrawerBloc>(context)
-                                .add(ChangeModeEvent());
-                          });
-                    },
-                  ),
-                ),
+                                .add(DrawerChangeModeEvent());
+                          }));
+                }),
                 BlocBuilder<LateralDrawerBloc, LateralDrawerState>(
                   builder: (context, state) {
                     return ListTile(
                       enabled: state.syncEnabled,
                       leading: Icon(
                         Icons.sync,
+                        color: state.isOnline
+                            ? Themes.mainTheme(context).colorScheme.background
+                            : Themes.mainTheme(context)
+                                .colorScheme
+                                .background
+                                .withOpacity(0.25),
                       ),
-                      title: Text('Sync Data'),
+                      title: Text(
+                        'Sincronizar datos',
+                        style: Themes.mainTheme(context).textTheme.subtitle1,
+                      ),
+                      subtitle: Text(
+                        'Trae nuevamente todos los datos disponibles.',
+                        style: Themes.mainTheme(context).textTheme.subtitle2,
+                      ),
                       onTap: () {
                         BlocProvider.of<LateralDrawerBloc>(context)
-                            .add(SyncDataEvent());
+                            .add(DrawerSyncDataEvent());
                       },
                     );
                   },

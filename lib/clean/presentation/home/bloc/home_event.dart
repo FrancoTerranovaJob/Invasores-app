@@ -20,6 +20,9 @@ class SyncDataEvent extends HomeEvent {
 }
 
 class ChangeModeEvent extends HomeEvent {
+  final bool newValue;
+
+  ChangeModeEvent(this.newValue);
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [newValue];
 }

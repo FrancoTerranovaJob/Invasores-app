@@ -1,6 +1,7 @@
 import 'package:kiwi/kiwi.dart';
 import 'package:urbe_solution/clean/domain/use_cases/change_mode_use_case.dart';
 import 'package:urbe_solution/clean/domain/use_cases/get_data_use_case.dart';
+import 'package:urbe_solution/clean/domain/use_cases/get_mode_use_case.dart';
 
 import 'package:urbe_solution/clean/domain/use_cases/initialize_app_use_case.dart';
 import 'package:urbe_solution/clean/domain/use_cases/is_valid_data.dart';
@@ -19,6 +20,8 @@ class UseCaseModule {
         .registerSingleton<SyncDataUseCase>((container) => SyncDataUseCase());
     KiwiContainer().registerSingleton<ChangeModeUseCase>(
         (container) => ChangeModeUseCase());
+    KiwiContainer()
+        .registerSingleton<GetModeUseCase>((container) => GetModeUseCase());
     return true;
   }
 }

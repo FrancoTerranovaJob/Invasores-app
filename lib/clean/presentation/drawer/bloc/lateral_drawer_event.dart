@@ -4,13 +4,18 @@ abstract class LateralDrawerEvent extends Equatable {
   const LateralDrawerEvent();
 }
 
-class ChangeModeEvent extends LateralDrawerEvent {
-  ChangeModeEvent();
+class DrawerChangeModeEvent extends LateralDrawerEvent {
+  DrawerChangeModeEvent();
   @override
   List<Object?> get props => [];
 }
 
-class SyncDataEvent extends LateralDrawerEvent {
+class DrawerSyncDataEvent extends LateralDrawerEvent {
+  @override
+  List<Object?> get props => [];
+}
+
+class InitializeDrawerEvent extends LateralDrawerEvent {
   @override
   List<Object?> get props => [];
 }

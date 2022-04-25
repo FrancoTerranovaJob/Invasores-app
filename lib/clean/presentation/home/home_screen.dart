@@ -11,7 +11,9 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => LateralDrawerBloc()),
+        BlocProvider(
+            create: (context) =>
+                LateralDrawerBloc()..add(InitializeDrawerEvent())),
         BlocProvider(
           create: (context) => HomeBloc()..add(LoadDataEvent()),
         )

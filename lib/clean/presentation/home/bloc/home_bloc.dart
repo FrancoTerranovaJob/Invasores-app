@@ -49,7 +49,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       }
     });
     on<ChangeModeEvent>((event, emit) async {
-      await changeMode.call();
+      await changeMode.call(event.newValue);
     });
   }
 }
