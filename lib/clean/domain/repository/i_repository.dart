@@ -9,5 +9,6 @@ abstract class IRepository {
   Future<bool> enableOnline();
   Future<bool> disableOnline();
   Future<bool> getIsOnline();
-  Future<List<Character>> getMorePeople(String nextPageUrl);
+
+  Future<bool> reportPerson(Character character);
 }

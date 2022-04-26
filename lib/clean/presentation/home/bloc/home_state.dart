@@ -57,3 +57,11 @@ class ChangeModeDisplayState extends HomeState {
       required bool isOnline})
       : super(data: data, showDrawer: showDrawer, isOnline: isOnline);
 }
+
+class SyncErrorState extends HomeState {
+  SyncErrorState(
+      {required ConsolidatedData data,
+      required bool showDrawer,
+      required bool isOnline})
+      : super(data: data, showDrawer: showDrawer, isOnline: isOnline);
+}

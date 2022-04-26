@@ -25,6 +25,7 @@ dependencies:
   equatable: 2.0.3
   pretty_dio_logger: 1.2.0-beta-1
   lottie: 1.3.0
+  flutter_svg: 1.0.3
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -40,6 +41,10 @@ flutter:
     - assets/splash/splash_app.json
     - assets/progress/
     - assets/progress/progress_app.json
+    - assets/svgs/
+    - assets/svgs/hair.svg
+    - assets/svgs/point.svg
+
 
 
   fonts:

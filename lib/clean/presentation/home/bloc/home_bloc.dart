@@ -62,10 +62,21 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
             showDrawer: state.showDrawer,
             isOnline: state.isOnline));
       } else {
-        emit(ErrorState(
-            data: state.data,
-            showDrawer: state.showDrawer,
-            isOnline: state.isOnline));
+        if (result.characters.isEmpty && state.data.characters.isNotEmpty) {
+          emit(DataState(
+              data: state.data,
+              showDrawer: state.showDrawer,
+              isOnline: state.isOnline));
+          emit(SyncErrorState(
+              data: state.data,
+              showDrawer: state.showDrawer,
+              isOnline: state.isOnline));
+        } else {
+          emit(ErrorState(
+              data: state.data,
+              showDrawer: state.showDrawer,
+              isOnline: state.isOnline));
+        }
       }
     });
     on<ChangeModeEvent>((event, emit) async {

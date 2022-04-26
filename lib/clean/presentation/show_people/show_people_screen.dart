@@ -10,19 +10,21 @@ class ShowPeopleScreen extends StatelessWidget {
   final Character character;
   final List<Planet> planets;
   final List<Transport> transports;
+  final bool offLineData;
 
   const ShowPeopleScreen(
       {Key? key,
       required this.character,
       required this.planets,
-      required this.transports})
+      required this.transports,
+      required this.offLineData})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => ShowPeopleBloc()
-        ..add(ShowProfileEvent(character, planets, transports)),
+        ..add(ShowProfileEvent(character, planets, transports, offLineData)),
       child: ShowPeopleContent(),
     );
   }

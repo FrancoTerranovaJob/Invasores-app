@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:kiwi/kiwi.dart';
 import 'package:urbe_solution/clean/data/providers/api/i_api_provider.dart';
+import 'package:urbe_solution/clean/data/providers/api/request/report_person_request.dart';
 import 'package:urbe_solution/clean/data/providers/api/response/get_characters_response.dart';
 import 'package:urbe_solution/clean/data/providers/api/response/get_planets_response.dart';
 import 'package:urbe_solution/clean/data/providers/api/response/get_starships_response.dart';
@@ -21,6 +24,7 @@ class Repository implements IRepository {
   final dbProvider = KiwiContainer().resolve<IDataBaseProvider>();
   final configuration = KiwiContainer().resolve<IConfigurationProvider>();
   final apiProvider = KiwiContainer().resolve<IApiProvider>();
+
   @override
   Future<bool> initializeApp() async {
     final isFirstTime = await configuration.getIsFirstTime();
@@ -28,7 +32,10 @@ class Repository implements IRepository {
       await dbProvider.createDataBase();
       await getConsolidatedData();
       await configuration.setIsFirstTime(false);
+    } else {
+      configuration.setIsOnline(false);
     }
+
     return true;
   }
 
@@ -49,7 +56,6 @@ class Repository implements IRepository {
         _getAllStarships(),
         _getAllVehicles()
       ]);
-
       final resultCharacters = result[0] as GetCharactersResponse;
 
       final resultPlanets = result[1] as GetPlanetsResponse;
@@ -154,15 +160,12 @@ class Repository implements IRepository {
   Future<GetPlanetsResponse> _getAllPlanets() async {
     final planetsList = <PlanetResponse>[];
     var resultPlanets = await apiProvider.getPlanets();
-    for (var plnts in resultPlanets.planets) {
-      planetsList.add(PlanetResponse(name: plnts.name, id: plnts.id));
-    }
+    planetsList.addAll(resultPlanets.planets);
     while (resultPlanets.nextPageUrl != null) {
       resultPlanets =
           await apiProvider.getPlanets(nextPageUrl: resultPlanets.nextPageUrl);
-      for (var plnts in resultPlanets.planets) {
-        planetsList.add(PlanetResponse(name: plnts.name, id: plnts.id));
-      }
+
+      planetsList.addAll(resultPlanets.planets);
     }
 
     return GetPlanetsResponse(planets: planetsList, nextPageUrl: null);
@@ -171,17 +174,11 @@ class Repository implements IRepository {
   Future<GetVehiclesResponse> _getAllVehicles() async {
     final vehiclesList = <VehicleResponse>[];
     var resultVehicles = await apiProvider.getVehicles();
-    for (var veh in resultVehicles.vehicles) {
-      vehiclesList.add(
-          VehicleResponse(name: veh.name, id: veh.id, pilotsId: veh.pilotsId));
-    }
+    vehiclesList.addAll(resultVehicles.vehicles);
     while (resultVehicles.nextPageUrl != null) {
       resultVehicles = await apiProvider.getVehicles(
           nextPageUrl: resultVehicles.nextPageUrl);
-      for (var veh in resultVehicles.vehicles) {
-        vehiclesList.add(VehicleResponse(
-            name: veh.name, id: veh.id, pilotsId: veh.pilotsId));
-      }
+      vehiclesList.addAll(resultVehicles.vehicles);
     }
     return GetVehiclesResponse(vehicles: vehiclesList, nextPageUrl: null);
   }
@@ -189,17 +186,11 @@ class Repository implements IRepository {
   Future<GetStarShipsResponse> _getAllStarships() async {
     final starShipsList = <StarShipResponse>[];
     var resultStarships = await apiProvider.getStarships();
-    for (var str in resultStarships.starships) {
-      starShipsList.add(
-          StarShipResponse(name: str.name, id: str.id, pilotsId: str.pilotsId));
-    }
+    starShipsList.addAll(resultStarships.starships);
     while (resultStarships.nextPageUrl != null) {
       resultStarships = await apiProvider.getStarships(
           nextPageUrl: resultStarships.nextPageUrl);
-      for (var str in resultStarships.starships) {
-        starShipsList.add(StarShipResponse(
-            name: str.name, id: str.id, pilotsId: str.pilotsId));
-      }
+      starShipsList.addAll(resultStarships.starships);
     }
     return GetStarShipsResponse(starships: starShipsList, nextPageUrl: null);
   }
@@ -297,38 +288,19 @@ class Repository implements IRepository {
   Future<GetCharactersResponse> _getAllPeople() async {
     final peoples = <CharacterResponse>[];
     var pplResult = await apiProvider.getPeople();
-    for (var ppl in pplResult.characters) {
-      peoples.add(ppl);
-    }
+    peoples.addAll(pplResult.characters);
     while (pplResult.nextPageUrl != null) {
       pplResult =
           await apiProvider.getPeople(nextPageUrl: pplResult.nextPageUrl);
-      for (var ppl in pplResult.characters) {
-        peoples.add(CharacterResponse(
-            id: ppl.id,
-            name: ppl.name,
-            eyesColor: ppl.eyesColor,
-            hairColor: ppl.hairColor,
-            height: ppl.height,
-            skinColor: ppl.skinColor,
-            gender: ppl.gender,
-            fromPlanet: ppl.fromPlanet,
-            bornYear: ppl.bornYear,
-            ships: ppl.ships,
-            vehicles: ppl.vehicles));
-      }
+      peoples.addAll(pplResult.characters);
     }
     return GetCharactersResponse(
         characters: peoples, nextPageUrl: pplResult.nextPageUrl);
   }
 
   @override
-  Future<List<Character>> getMorePeople(String nextPageUrl) async {
-    final pplList = <Character>[];
-    var pplResult = await apiProvider.getPeople(nextPageUrl: nextPageUrl);
-    for (var ppl in pplResult.characters) {
-      pplList.add(_getCharResponse(ppl));
-    }
-    return pplList;
+  Future<bool> reportPerson(Character character) async {
+    return await apiProvider.reportPerson(ReportPersonRequest(
+        id: 1, date: DateTime.now().toString(), name: character.name));
   }
 }

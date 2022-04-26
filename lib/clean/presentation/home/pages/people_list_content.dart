@@ -3,14 +3,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 import 'package:urbe_solution/clean/domain/entities/character.dart';
 import 'package:urbe_solution/clean/presentation/home/bloc/home_bloc.dart';
+import 'package:urbe_solution/clean/presentation/show_people/show_people_screen.dart';
 
 import '../../../../theme/app_theme.dart';
 import '../../../../widgets/people_card/people_card.dart';
 
 class PeopleListContent extends StatelessWidget {
   final List<Character> people;
-
-  const PeopleListContent({Key? key, required this.people}) : super(key: key);
+  final Function(Character charSelected) onCardPressed;
+  const PeopleListContent(
+      {Key? key, required this.people, required this.onCardPressed})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -19,6 +22,9 @@ class PeopleListContent extends StatelessWidget {
     final double itemWidth = size.width / 2;
     final cards = List.generate(people.length, (index) {
       return PeopleCard<Character>(
+          onPressed: (char) {
+            onCardPressed(char);
+          },
           item: people[index],
           head: (char) {
             return Container(
