@@ -4,6 +4,7 @@ import 'package:lottie/lottie.dart';
 import 'package:urbe_solution/clean/domain/entities/character.dart';
 import 'package:urbe_solution/clean/presentation/home/bloc/home_bloc.dart';
 import 'package:urbe_solution/clean/presentation/show_people/show_people_screen.dart';
+import 'package:urbe_solution/widgets/filter/filter_list.dart';
 
 import '../../../../theme/app_theme.dart';
 import '../../../../widgets/people_card/people_card.dart';
@@ -60,41 +61,49 @@ class PeopleListContent extends StatelessWidget {
               decoration: BoxDecoration(
                   color: Themes.mainTheme(context).colorScheme.onPrimary,
                   borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(20),
-                      bottomRight: Radius.circular(20))),
+                      bottomLeft: Radius.circular(10),
+                      bottomRight: Radius.circular(10))),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(5.0),
-                    child: Container(
+                    child: SizedBox(
                         width: double.infinity,
                         child: Text(
-                          'Genero',
+                          'Género',
                           style: Themes.mainTheme(context).textTheme.subtitle1,
+                          textAlign: TextAlign.center,
                         )),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: Container(
+                    padding: const EdgeInsets.only(left: 10.0),
+                    child: SizedBox(
                         width: double.infinity,
                         child: Text(
-                          '${char.gender}',
+                          char.gender == GenderType.female
+                              ? 'Femenino'
+                              : char.gender == GenderType.male
+                                  ? 'Masculino'
+                                  : char.gender == GenderType.unknown
+                                      ? 'Desconocido'
+                                      : 'No tiene',
                           style: Themes.mainTheme(context).textTheme.subtitle2,
                         )),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(5.0),
-                    child: Container(
+                    child: SizedBox(
                         width: double.infinity,
                         child: Text(
                           'Altura (cm)',
                           style: Themes.mainTheme(context).textTheme.subtitle1,
+                          textAlign: TextAlign.center,
                         )),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: Container(
+                    padding: const EdgeInsets.only(left: 10.0),
+                    child: SizedBox(
                         width: double.infinity,
                         child: Text(
                           '${char.height}',
@@ -116,11 +125,12 @@ class PeopleListContent extends StatelessWidget {
         child: Column(
           children: [
             Expanded(
+                flex: 8,
                 child: GridView.count(
-              childAspectRatio: (itemWidth / itemHeight),
-              crossAxisCount: 2,
-              children: cards,
-            )),
+                  childAspectRatio: (itemWidth / itemHeight),
+                  crossAxisCount: 2,
+                  children: cards,
+                )),
           ],
         ),
       ),

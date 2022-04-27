@@ -12,53 +12,85 @@ class TransportList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            'Naves y vehiculos',
-            style: Themes.mainTheme(context).textTheme.headline2!.copyWith(
-                color: Themes.mainTheme(context).colorScheme.onBackground),
+        Expanded(
+          child: Container(
+            color: Themes.mainTheme(context).colorScheme.primary,
+            child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Text(
+                    'Naves y vehiculos',
+                    style: Themes.mainTheme(context)
+                        .textTheme
+                        .headline2!
+                        .copyWith(
+                            color: Themes.mainTheme(context)
+                                .colorScheme
+                                .onBackground),
+                    textAlign: TextAlign.center,
+                  ),
+                )),
           ),
         ),
-        Expanded(
-          child: ListView.separated(
-            itemCount: transports.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                tileColor: Themes.mainTheme(context)
-                    .colorScheme
-                    .onBackground
-                    .withOpacity(0.50),
-                title: Text(
-                  transports[index].name,
-                  style: Themes.mainTheme(context)
-                      .textTheme
-                      .subtitle1!
-                      .copyWith(
-                          color:
-                              Themes.mainTheme(context).colorScheme.background),
+        transports.isNotEmpty
+            ? Expanded(
+                flex: 6,
+                child: ListView.separated(
+                  itemCount: transports.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      tileColor: Themes.mainTheme(context)
+                          .colorScheme
+                          .onBackground
+                          .withOpacity(0.50),
+                      title: Text(
+                        transports[index].name,
+                        style: Themes.mainTheme(context)
+                            .textTheme
+                            .subtitle1!
+                            .copyWith(
+                                color: Themes.mainTheme(context)
+                                    .colorScheme
+                                    .background),
+                      ),
+                      trailing: Text(
+                        transports[index].type == TransportType.starship
+                            ? 'nave'
+                            : 'vehículo',
+                        style: Themes.mainTheme(context)
+                            .textTheme
+                            .subtitle1!
+                            .copyWith(
+                                color: Themes.mainTheme(context)
+                                    .colorScheme
+                                    .onBackground
+                                    .withOpacity(0.75)),
+                      ),
+                    );
+                    // return Text('${state.characterSelected.transports[index]}');
+                  },
+                  separatorBuilder: (context, index) => Divider(
+                    height: 5,
+                  ),
                 ),
-                trailing: Text(
-                  transports[index].type == TransportType.starship
-                      ? 'nave'
-                      : 'vehiculo',
-                  style: Themes.mainTheme(context)
-                      .textTheme
-                      .subtitle1!
-                      .copyWith(
-                          color: Themes.mainTheme(context)
-                              .colorScheme
-                              .onBackground
-                              .withOpacity(0.75)),
+              )
+            : Expanded(
+                flex: 6,
+                child: Center(
+                  child: Text(
+                    'No posee',
+                    style: Themes.mainTheme(context)
+                        .textTheme
+                        .subtitle1!
+                        .copyWith(
+                            color: Themes.mainTheme(context)
+                                .colorScheme
+                                .onBackground
+                                .withOpacity(0.50)),
+                  ),
                 ),
-              );
-              // return Text('${state.characterSelected.transports[index]}');
-            },
-            separatorBuilder: (context, index) => Divider(
-              height: 5,
-            ),
-          ),
-        )
+              )
       ],
     );
   }

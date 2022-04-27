@@ -11,19 +11,23 @@ class ProgressContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Themes.mainTheme(context).colorScheme.primary,
-      child: Center(
-          child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Progress(),
-          Visibility(
-              visible: showSyncMessage,
-              child: Text(
-                  'Sincronizando... Este proceso puede demorar unos minutos'))
-        ],
-      )),
+    return Scaffold(
+      body: SafeArea(
+        child: Container(
+          color: Themes.mainTheme(context).colorScheme.primary,
+          child: Center(
+              child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Progress(),
+              Visibility(
+                  visible: showSyncMessage,
+                  child: Text(
+                      'Sincronizando... Este proceso puede demorar unos minutos'))
+            ],
+          )),
+        ),
+      ),
     );
   }
 }

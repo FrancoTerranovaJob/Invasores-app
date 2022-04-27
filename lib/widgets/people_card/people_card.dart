@@ -17,8 +17,8 @@ class PeopleCard<T> extends StatelessWidget {
     return Card(
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(20),
-              bottomRight: Radius.circular(20))),
+              bottomLeft: Radius.circular(10),
+              bottomRight: Radius.circular(10))),
       elevation: 5,
       child: InkWell(
         splashColor: Colors.blue.withAlpha(30),

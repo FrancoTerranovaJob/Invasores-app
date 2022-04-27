@@ -14,7 +14,7 @@ class BodyDetails extends StatelessWidget {
     return Column(
       children: [
         Text(
-          'Datos Fisicos',
+          'Datos Físicos',
           style: Themes.mainTheme(context).textTheme.headline2!.copyWith(
               color: Themes.mainTheme(context).colorScheme.onBackground),
         ),
@@ -36,7 +36,7 @@ class BodyDetails extends StatelessWidget {
               ),
               title: Text(
                 index == 0
-                    ? 'Color de pelo'
+                    ? 'Color de cabello'
                     : index == 1
                         ? 'Color de piel'
                         : 'Color de ojos',
@@ -46,7 +46,12 @@ class BodyDetails extends StatelessWidget {
                         .onBackground
                         .withOpacity(0.75)),
               ),
-              trailing: Text(character.hairColor,
+              trailing: Text(
+                  index == 0
+                      ? _parseAttribute(character.hairColor)
+                      : index == 1
+                          ? _parseAttribute(character.skinColor)
+                          : _parseAttribute(character.eyesColor),
                   style: Themes.mainTheme(context)
                       .textTheme
                       .subtitle1!
@@ -58,5 +63,15 @@ class BodyDetails extends StatelessWidget {
         )),
       ],
     );
+  }
+
+  String _parseAttribute(String attribute) {
+    if (attribute == 'none' || attribute == 'n/a') {
+      return ' - ';
+    } else if (attribute == 'unknown') {
+      return 'desconocido';
+    } else {
+      return attribute;
+    }
   }
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:urbe_solution/clean/presentation/show_people/bloc/show_people_bloc.dart';
+import 'package:urbe_solution/clean/presentation/show_people/pages/profile_page/footer/profile_footer.dart';
 import 'package:urbe_solution/clean/presentation/show_people/pages/profile_page/pages/body_details.dart';
 import 'package:urbe_solution/clean/presentation/show_people/pages/profile_page/pages/transport_list.dart';
 import 'package:urbe_solution/widgets/buttons/rounded_button.dart';
@@ -83,86 +85,31 @@ class ProfilePage extends StatelessWidget {
                 ),
               ),
               Expanded(
-                flex: 3,
-                child: Container(
-                  color: Themes.mainTheme(context)
-                      .colorScheme
-                      .onBackground
-                      .withOpacity(0.25),
-                  child: InkWell(
-                    splashColor: Colors.transparent,
-                    onTap: () {
+                flex: 4,
+                child: InkWell(
+                  splashColor: Colors.transparent,
+                  onTap: () {
+                    BlocProvider.of<ShowPeopleBloc>(context)
+                        .add(StopAnimationEvent());
+                  },
+                  child: PageView(
+                    controller: pageController,
+                    onPageChanged: (page) {
                       BlocProvider.of<ShowPeopleBloc>(context)
-                          .add(StopAnimationEvent());
+                          .add(PageChangedEvent(page: page));
                     },
-                    child: PageView(
-                      controller: pageController,
-                      onPageChanged: (page) {
-                        BlocProvider.of<ShowPeopleBloc>(context)
-                            .add(PageChangedEvent(page: page));
-                      },
-                      children: [
-                        BodyDetails(
-                          character: state.characterSelected,
-                        ),
-                        TransportList(
-                            transports: state.characterSelected.transports)
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Container(
-                  width: double.infinity,
-                  color: Themes.mainTheme(context).colorScheme.primary,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      state.enableReportButton
-                          ? Text(
-                              '¿Vio alguien parecido?',
-                              style: Themes.mainTheme(context)
-                                  .textTheme
-                                  .subtitle1!
-                                  .copyWith(
-                                      color: Themes.mainTheme(context)
-                                          .colorScheme
-                                          .onBackground),
-                            )
-                          : Text.rich(TextSpan(children: [
-                              TextSpan(
-                                  text: 'Para reportar debes estar ',
-                                  style: Themes.mainTheme(context)
-                                      .textTheme
-                                      .subtitle1!
-                                      .copyWith(
-                                          color: Themes.mainTheme(context)
-                                              .colorScheme
-                                              .onBackground)),
-                              TextSpan(
-                                  text: 'online',
-                                  style: Themes.mainTheme(context)
-                                      .textTheme
-                                      .subtitle1!
-                                      .copyWith(color: Colors.green))
-                            ])),
-                      Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: RoundedButton(
-                            enabledColor:
-                                Themes.mainTheme(context).colorScheme.onPrimary,
-                            disabledColor: Themes.mainTheme(context)
-                                .colorScheme
-                                .onBackground
-                                .withOpacity(0.50),
-                            textColor: Colors.black,
-                            text: 'Reportar',
-                            onPressed: state.enableReportButton ? () {} : null),
-                      )
+                      BodyDetails(
+                        character: state.characterSelected,
+                      ),
+                      TransportList(
+                          transports: state.characterSelected.transports)
                     ],
                   ),
                 ),
+              ),
+              ProfileFooter(
+                state: state,
               )
             ],
           );
