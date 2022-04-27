@@ -5,6 +5,7 @@ import 'package:urbe_solution/clean/presentation/show_people/bloc/show_people_bl
 import 'package:urbe_solution/clean/presentation/show_people/pages/profile_page/footer/profile_footer.dart';
 import 'package:urbe_solution/clean/presentation/show_people/pages/profile_page/pages/body_details.dart';
 import 'package:urbe_solution/clean/presentation/show_people/pages/profile_page/pages/transport_list.dart';
+import 'package:urbe_solution/clean/presentation/show_people/pages/send_report_error_page.dart';
 import 'package:urbe_solution/widgets/buttons/rounded_button.dart';
 
 import '../../../../../theme/app_theme.dart';
@@ -13,21 +14,25 @@ class ProfilePage extends StatelessWidget {
   final PageController pageController = PageController();
   @override
   Widget build(BuildContext context) {
-    return BlocListener<ShowPeopleBloc, ShowPeopleState>(
-      listenWhen: (p, c) => c is AnimatePageViewState,
-      listener: (context, state) {
-        if (state.page == 0) {
-          pageController.animateToPage(1,
-              duration: Duration(seconds: 1), curve: Curves.easeIn);
-          BlocProvider.of<ShowPeopleBloc>(context)
-              .add(StartAnimationPageEvent());
-        } else {
-          pageController.animateToPage(0,
-              duration: Duration(seconds: 1), curve: Curves.easeOut);
-          BlocProvider.of<ShowPeopleBloc>(context)
-              .add(StartAnimationPageEvent());
-        }
-      },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<ShowPeopleBloc, ShowPeopleState>(
+          listenWhen: (p, c) => c is AnimatePageViewState,
+          listener: (context, state) {
+            if (state.page == 0) {
+              pageController.animateToPage(1,
+                  duration: Duration(seconds: 1), curve: Curves.easeIn);
+              BlocProvider.of<ShowPeopleBloc>(context)
+                  .add(StartAnimationPageEvent());
+            } else {
+              pageController.animateToPage(0,
+                  duration: Duration(seconds: 1), curve: Curves.easeOut);
+              BlocProvider.of<ShowPeopleBloc>(context)
+                  .add(StartAnimationPageEvent());
+            }
+          },
+        ),
+      ],
       child: BlocBuilder<ShowPeopleBloc, ShowPeopleState>(
         buildWhen: (p, c) => c is ShowPeopleInitial,
         builder: (context, state) {
@@ -109,6 +114,10 @@ class ProfilePage extends StatelessWidget {
                 ),
               ),
               ProfileFooter(
+                onReportPressed: () {
+                  BlocProvider.of<ShowPeopleBloc>(context)
+                      .add(ReportCharacterEvent());
+                },
                 state: state,
               )
             ],

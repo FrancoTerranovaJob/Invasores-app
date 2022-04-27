@@ -6,6 +6,7 @@ import 'package:kiwi/kiwi.dart';
 import 'package:urbe_solution/clean/domain/entities/character.dart';
 import 'package:urbe_solution/clean/domain/entities/planet.dart';
 import 'package:urbe_solution/clean/domain/entities/transport.dart';
+import 'package:urbe_solution/clean/domain/use_cases/report_use_case.dart';
 
 import '../../../domain/use_cases/get_mode_use_case.dart';
 
@@ -14,6 +15,7 @@ part 'show_people_state.dart';
 
 class ShowPeopleBloc extends Bloc<ShowPeopleEvent, ShowPeopleState> {
   final getMode = KiwiContainer().resolve<GetModeUseCase>();
+  final reportPerson = KiwiContainer().resolve<ReportUseCase>();
   ShowPeopleBloc()
       : super(ShowPeopleInitial(
             characterSelected: Character(
@@ -131,6 +133,34 @@ class ShowPeopleBloc extends Bloc<ShowPeopleEvent, ShowPeopleState> {
     on<StopAnimationEvent>((event, emit) async {
       if (state is! AnimatePageViewState) {
         emit(StopAnimationState(
+            characterSelected: state.characterSelected,
+            planets: state.planets,
+            transports: state.transports,
+            offLineData: state.offLineData,
+            page: state.page,
+            enableReportButton: state.enableReportButton));
+      }
+    });
+
+    on<ReportCharacterEvent>((event, emit) async {
+      emit(SendingReportState(
+          characterSelected: state.characterSelected,
+          planets: state.planets,
+          transports: state.transports,
+          offLineData: state.offLineData,
+          page: state.page,
+          enableReportButton: state.enableReportButton));
+      final result = await reportPerson.call(state.characterSelected);
+      if (result) {
+        emit(ReportSendState(
+            characterSelected: state.characterSelected,
+            planets: state.planets,
+            transports: state.transports,
+            offLineData: state.offLineData,
+            page: state.page,
+            enableReportButton: state.enableReportButton));
+      } else {
+        emit(ReportSendErrorState(
             characterSelected: state.characterSelected,
             planets: state.planets,
             transports: state.transports,

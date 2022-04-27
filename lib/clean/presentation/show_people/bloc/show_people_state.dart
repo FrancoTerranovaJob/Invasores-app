@@ -126,3 +126,54 @@ class StopAnimationState extends ShowPeopleState {
             page: page,
             enableReportButton: enableReportButton);
 }
+
+class ReportSendState extends ShowPeopleState {
+  ReportSendState(
+      {required Character characterSelected,
+      required List<Planet> planets,
+      required List<Transport> transports,
+      required bool offLineData,
+      required int page,
+      required bool enableReportButton})
+      : super(
+            characterSelected: characterSelected,
+            planets: planets,
+            transports: transports,
+            offLineData: offLineData,
+            page: page,
+            enableReportButton: enableReportButton);
+}
+
+class ReportSendErrorState extends ShowPeopleState {
+  ReportSendErrorState(
+      {required Character characterSelected,
+      required List<Planet> planets,
+      required List<Transport> transports,
+      required bool offLineData,
+      required int page,
+      required bool enableReportButton})
+      : super(
+            characterSelected: characterSelected,
+            planets: planets,
+            transports: transports,
+            offLineData: offLineData,
+            page: page,
+            enableReportButton: enableReportButton);
+}
+
+class SendingReportState extends ShowPeopleState {
+  SendingReportState(
+      {required Character characterSelected,
+      required List<Planet> planets,
+      required List<Transport> transports,
+      required bool offLineData,
+      required int page,
+      required bool enableReportButton})
+      : super(
+            characterSelected: characterSelected,
+            planets: planets,
+            transports: transports,
+            offLineData: offLineData,
+            page: page,
+            enableReportButton: enableReportButton);
+}

@@ -68,7 +68,7 @@ class DataContent extends StatelessWidget {
                         c is FilterSelectedState || c is FilterDeselectedState,
                     builder: (context, state) {
                       return FilterList<GenderType>(
-                        items: [
+                        items: const [
                           GenderType.male,
                           GenderType.female,
                           GenderType.unknown,

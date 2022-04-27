@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:urbe_solution/clean/data/providers/data_base/models/request/set_transports_request.dart';
 
 class SetCharactersRequest extends Equatable {
   final List<CharactersDB> characters;
@@ -8,7 +7,7 @@ class SetCharactersRequest extends Equatable {
   factory SetCharactersRequest.fromJson(Map<String, dynamic> data) {
     final chars = data['results'];
     final charsList = <CharactersDB>[];
-    final vehicles = <String>[];
+
     for (var ch in chars) {
       charsList.add(CharactersDB(
         id: ch['url'],
@@ -83,10 +82,10 @@ class CharactersDB extends Equatable {
     };
     final List<Map<String, dynamic>> transports = [];
 
-    starShipsId.forEach((element) {
+    starShipsId.map((element) {
       transports.add({'character_id': id, 'transport_id': element});
     });
-    vehiclesId.forEach((element) {
+    vehiclesId.map((element) {
       transports.add({'character_id': id, 'transport_id': element});
     });
     data['characterTransports'] = transports;

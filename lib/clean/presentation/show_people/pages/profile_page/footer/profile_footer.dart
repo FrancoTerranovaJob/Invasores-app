@@ -9,8 +9,11 @@ import '../../../bloc/show_people_bloc.dart';
 
 class ProfileFooter extends StatelessWidget {
   final ShowPeopleState state;
+  final Function() onReportPressed;
 
-  const ProfileFooter({Key? key, required this.state}) : super(key: key);
+  const ProfileFooter(
+      {Key? key, required this.state, required this.onReportPressed})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -73,7 +76,7 @@ class ProfileFooter extends StatelessWidget {
                       .withOpacity(0.50),
                   textColor: Colors.black,
                   text: 'Reportar',
-                  onPressed: state.enableReportButton ? () {} : null),
+                  onPressed: state.enableReportButton ? onReportPressed : null),
             )
           ],
         ),
