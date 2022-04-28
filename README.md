@@ -27,6 +27,7 @@ IApiProvider:
  - getPlanetsResponse: Retorna un objeto GetPlanetsResponse, el cual contiene un listado de planetas con sus atributos
  - getVehicles: Retorna un objeto GetVehiclesResponse, el cual contiene un listado de vehiculos con sus atributos
  - getStarShipsResponse: Retorna un objeto GetStarshipsResponse, el cual contiene un listado de naves espaciales con sus atributos
+ - reportPerson: Se realiza el reporte de la persona seleccionada con un POST
 
 IDataBaseProvider:
  - createDataBase: Crea las distintas tablas necesarias en la base de datos local.
@@ -42,12 +43,17 @@ IRepository:
  - getConsolidatedData: Trae todos los datos de la api, y los consolida o trae todos los datos ya consolidados de la DB local
  dependiendo de si el usuario se encuentra en modo ONLINE u OFFLINE respectivamente
  - syncData: realiza un llamado a "getConsolidateData" 
+ - reportPerson: se realiza el llamado al metodo reportPerson del apiProvider 
 
 Presentacion:
-- Se utilizo flutter_bloc para manejar el estado y los eventos de la app
-
+- Core: Aqui se se inicia la app, y se muestra en caso de ser necesario el splash de la misma.
+- Drawer: Aqui se encuentra la definicion de UI del menu lateral y se maneja el estado de la misma.
+- Home: Ubicacion principal de la aplicacion, donde se encuentra la definicion de UI de la lista de personajes y se maneja el estado de la lista de la misma.
+- Show_people: Aqui se encuentra la definicion de UI de la pantalla responsable de mostrar los datos adicionales de los personajes y se controla su estado.
 
 ## Detalles tecnicos 
 
-- version de flutter: 
-- 
+- version del sdk de flutter: 2.10.4 
+- liberia de inyeccion de dependencia: Kiwi
+- libreria para el manejo de estados: flutter_bloc
+- libreria para test: mockito
