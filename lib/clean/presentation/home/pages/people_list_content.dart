@@ -106,7 +106,9 @@ class PeopleListContent extends StatelessWidget {
                     child: SizedBox(
                         width: double.infinity,
                         child: Text(
-                          '${char.height}',
+                          char.height == 'unknown'
+                              ? 'Desconocida'
+                              : char.height,
                           style: Themes.mainTheme(context).textTheme.subtitle2,
                         )),
                   ),
