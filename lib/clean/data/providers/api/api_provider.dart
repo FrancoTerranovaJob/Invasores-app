@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:kiwi/kiwi.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+import 'package:urbe_solution/clean/data/providers/api/request/report_person_request.dart';
 import 'package:urbe_solution/clean/data/providers/api/response/get_characters_response.dart';
 import 'package:urbe_solution/clean/data/providers/api/response/get_planets_response.dart';
 import 'package:urbe_solution/clean/data/providers/api/response/get_starships_response.dart';
@@ -90,6 +91,17 @@ class ApiProvider extends IApiProvider {
       }
     } catch (e) {
       return GetVehiclesResponse(vehicles: [], nextPageUrl: null);
+    }
+  }
+
+  @override
+  Future<bool> reportPerson(ReportPersonRequest reportPersonRequest) async {
+    try {
+      await dio.post(IApiProvider.reportUrl,
+          data: reportPersonRequest.toJson());
+      return true;
+    } catch (e) {
+      return false;
     }
   }
 }

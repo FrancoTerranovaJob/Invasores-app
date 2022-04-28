@@ -26,3 +26,17 @@ class ChangeModeEvent extends HomeEvent {
   @override
   List<Object?> get props => [newValue];
 }
+
+class FilterSelectedEvent extends HomeEvent {
+  final GenderType gender;
+
+  FilterSelectedEvent(this.gender);
+  @override
+  List<Object?> get props => [gender];
+}
+
+class FilterDeselectedEvent extends HomeEvent {
+  FilterDeselectedEvent();
+  @override
+  List<Object?> get props => [];
+}
