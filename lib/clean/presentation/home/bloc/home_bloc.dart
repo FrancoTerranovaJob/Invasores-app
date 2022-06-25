@@ -2,28 +2,27 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:kiwi/kiwi.dart';
-import 'package:urbe_solution/clean/domain/entities/character.dart';
-import 'package:urbe_solution/clean/domain/entities/consolidated_data.dart';
-import 'package:urbe_solution/clean/domain/use_cases/change_mode_use_case.dart';
-import 'package:urbe_solution/clean/domain/use_cases/get_data_use_case.dart';
-import 'package:urbe_solution/clean/domain/use_cases/get_mode_use_case.dart';
-import 'package:urbe_solution/clean/domain/use_cases/is_valid_data.dart';
+import 'package:urbe_solution/clean/domain/entities/invader.dart';
+import 'package:urbe_solution/clean/domain/entities/invaders_list.dart';
 
-import '../../../domain/use_cases/sync_data_use_case.dart';
+import '../../../domain/invaders_domain/use_cases/invaders_use_cases.dart';
+import '../../../domain/user_domain/use_cases/user_use_cases.dart';
 
 part 'home_event.dart';
 part 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
-  final getData = KiwiContainer().resolve<GetDataUseCase>();
-  final isValidData = KiwiContainer().resolve<IsValidData>();
-  final syncData = KiwiContainer().resolve<SyncDataUseCase>();
-  final changeMode = KiwiContainer().resolve<ChangeModeUseCase>();
-  final getMode = KiwiContainer().resolve<GetModeUseCase>();
-  HomeBloc()
-      : super(HomeInitial(
-          data: ConsolidatedData(
+  final GetInvadersDataUseCase getData;
+  final SyncDataUseCase syncData;
+  final ChangeModeUseCase changeMode;
+  final GetModeUseCase getMode;
+  HomeBloc({
+    required this.getData,
+    required this.syncData,
+    required this.changeMode,
+    required this.getMode,
+  }) : super(HomeInitial(
+          data: InvadersList(
               characters: [], planets: [], transports: [], isOnline: false),
           showDrawer: false,
           isOnline: false,

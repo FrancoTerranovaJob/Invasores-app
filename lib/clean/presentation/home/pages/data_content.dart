@@ -4,7 +4,7 @@ import 'package:urbe_solution/clean/presentation/home/pages/people_list_content.
 
 import '../../../../theme/app_theme.dart';
 import '../../../../widgets/filter/filter_list.dart';
-import '../../../domain/entities/character.dart';
+import '../../../domain/entities/invader.dart';
 import '../../drawer/bloc/lateral_drawer_bloc.dart';
 import '../../drawer/lateral_drawer_screen.dart';
 import '../../show_people/show_people_screen.dart';

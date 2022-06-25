@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class Themes {
   static ThemeData mainTheme(BuildContext context) {
-    return Theme.of(context).copyWith(
+    return ThemeData(
         textTheme: const TextTheme(
             headline1: TextStyle(
                 fontSize: 30.0,

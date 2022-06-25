@@ -3,17 +3,18 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:kiwi/kiwi.dart';
-import 'package:urbe_solution/clean/domain/use_cases/get_mode_use_case.dart';
+
+import '../../../domain/user_domain/use_cases/user_use_cases.dart';
 
 part 'lateral_drawer_event.dart';
 part 'lateral_drawer_state.dart';
 
 class LateralDrawerBloc extends Bloc<LateralDrawerEvent, LateralDrawerState> {
-  final getMode = KiwiContainer().resolve<GetModeUseCase>();
-  LateralDrawerBloc()
+  final GetModeUseCase getModeUseCase;
+  LateralDrawerBloc({required this.getModeUseCase})
       : super(const LateralDrawerInitial(syncEnabled: false, isOnline: false)) {
     on<InitializeDrawerEvent>((event, emit) async {
-      final isOnline = await getMode.call();
+      final isOnline = await getModeUseCase.call();
       emit(IdleState(isOnline: isOnline, syncEnabled: isOnline));
     });
     on<DrawerSyncDataEvent>((event, emit) {

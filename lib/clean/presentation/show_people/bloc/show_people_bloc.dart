@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:kiwi/kiwi.dart';
-import 'package:urbe_solution/clean/domain/entities/character.dart';
+import 'package:urbe_solution/clean/domain/entities/invader.dart';
 import 'package:urbe_solution/clean/domain/entities/planet.dart';
 import 'package:urbe_solution/clean/domain/entities/transport.dart';
 import 'package:urbe_solution/clean/domain/use_cases/report_use_case.dart';

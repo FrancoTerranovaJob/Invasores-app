@@ -1,14 +1,14 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:kiwi/kiwi.dart';
-import 'package:urbe_solution/clean/domain/use_cases/initialize_app_use_case.dart';
+
+import '../../../domain/user_domain/use_cases/user_use_cases.dart';
 
 part 'core_event.dart';
 part 'core_state.dart';
 
 class CoreBloc extends Bloc<CoreEvent, CoreState> {
-  final initializeUseCase = KiwiContainer().resolve<InitializeAppUseCase>();
-  CoreBloc() : super(CoreInitial()) {
+  final InitializeAppUseCase initializeUseCase;
+  CoreBloc({required this.initializeUseCase}) : super(CoreInitial()) {
     on<InitializeAppEvent>((event, emit) async {
       emit(InitializeAppState());
       await initializeUseCase.call();

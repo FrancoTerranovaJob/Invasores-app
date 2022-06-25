@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
-import 'package:urbe_solution/clean/domain/entities/character.dart';
+import 'package:urbe_solution/clean/domain/entities/invader.dart';
 import 'package:urbe_solution/clean/presentation/home/bloc/home_bloc.dart';
 import 'package:urbe_solution/clean/presentation/show_people/show_people_screen.dart';
 import 'package:urbe_solution/widgets/filter/filter_list.dart';

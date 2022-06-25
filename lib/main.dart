@@ -1,43 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kiwi/kiwi.dart';
-import 'package:urbe_solution/clean/data/providers/api/i_api_provider.dart';
-import 'package:urbe_solution/clean/data/providers/data_base/models/database_testing.dart';
-import 'package:urbe_solution/clean/data/providers/data_base/models/request/set_planets_request.dart';
-import 'package:urbe_solution/clean/data/providers/data_base/models/request/set_transports_request.dart';
-import 'package:urbe_solution/clean/domain/repository/i_repository.dart';
-import 'package:urbe_solution/clean/presentation/core/welcome_screen.dart';
-import 'package:urbe_solution/modules/database_module.dart';
-import 'package:urbe_solution/modules/preferences_module.dart';
-import 'package:urbe_solution/modules/providers_module.dart';
-import 'package:urbe_solution/modules/repository_module.dart';
-import 'package:urbe_solution/modules/use_case_module.dart';
-import 'clean/data/providers/data_base/i_data_base_provider.dart';
-import 'clean/data/providers/data_base/models/request/set_characters_request.dart';
+import 'package:urbe_solution/clean/domain/user_domain/use_cases/user_use_cases.dart';
+import 'package:urbe_solution/di/http_module.dart';
+
 import 'clean/presentation/core/core_bloc/core_bloc.dart';
+import 'clean/presentation/core/welcome_screen.dart';
+import 'di/database_module.dart';
+import 'di/kiwi.dart';
+import 'di/preferences_module.dart';
+import 'di/providers_module.dart';
+import 'di/repository_module.dart';
+import 'di/use_case_module.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await PreferencesModule.preferencesModuleInitialize();
+  PreferencesModule.preferencesModuleInitialize();
+  HttpModule.initializeHttpModule();
   await DatabaseModule.databaseInitialize();
-  await ProvidersModule.providersInitialize();
-  await RepositoryModule.repositoryInitialize();
-  await UseCaseModule.useCaseInitialize();
+  ProvidersModule.providersInitialize();
+  RepositoryModule.repositoryInitialize();
+  UseCaseModule.useCaseInitialize();
 
-  runApp(const UberSolution());
+  runApp(const InvadersApp());
 }
 
-class UberSolution extends StatelessWidget {
-  const UberSolution({Key? key}) : super(key: key);
+class InvadersApp extends StatelessWidget {
+  const InvadersApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Urbe Solution',
+        title: 'Invaders',
         theme: ThemeData(),
         home: BlocProvider(
-          create: (context) => CoreBloc()..add(InitializeAppEvent()),
+          create: (context) => CoreBloc(
+              initializeUseCase: services.resolve<InitializeAppUseCase>())
+            ..add(InitializeAppEvent()),
           child: WelcomeScreen(),
         ));
   }
