@@ -6,10 +6,8 @@ import 'kiwi.dart';
 
 class DatabaseModule {
   static Future<bool> databaseInitialize() async {
-    final bool isFirstTime =
-        await services.resolve<IConfigurationProvider>().getIsFirstTime();
     services.registerSingleton<IDataBaseProvider>(
-        (container) => DataBaseProvider()..createDataBase(isFirstTime));
+        (container) => DataBaseProvider());
     return true;
   }
 }

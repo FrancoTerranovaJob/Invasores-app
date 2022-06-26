@@ -9,6 +9,9 @@ class Planet extends Equatable {
   factory Planet.fromString({required String id}) {
     return Planet(name: '', id: id);
   }
+  factory Planet.fromDataBase(Map<dynamic, dynamic> json) {
+    return Planet(name: json['name'], id: json['id']);
+  }
 
   Map<String, dynamic> toJson() {
     return {'id': id, 'name': name};

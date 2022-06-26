@@ -61,7 +61,10 @@ class InvadersRepository implements IInvadersRepository {
   }
 
   Future<InvadersList> _getOfflineData() async {
-    return InvadersList();
+    final response = await db.getInvaders();
+    final invaderList =
+        response.map((invader) => Invader.fromDataBase(invader)).toList();
+    return InvadersList(invaders: invaderList);
   }
 
   Future<bool> _saveDataInDataBase(List<Invader> invaders) async {

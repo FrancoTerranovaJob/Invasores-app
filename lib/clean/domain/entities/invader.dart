@@ -16,7 +16,7 @@ class Invader extends Equatable {
   final GenderType gender;
   final List<Transport> transports;
 
-  Invader(
+  const Invader(
       {required this.id,
       required this.name,
       required this.lastName,
@@ -31,17 +31,14 @@ class Invader extends Equatable {
 
   factory Invader.fromInvaderResponse(
       {required InvaderResponse invaderResponse}) {
-    final String gender = invaderResponse.gender;
     final List<Transport> transports = [];
 
     transports.addAll(invaderResponse.vehicles
-        .map((vehicle) => Transport.fromString(
-            transportType: TransportType.vehicle, id: vehicle))
+        .map((vehicle) => Transport.vehicleFromId(id: vehicle))
         .toList());
 
     transports.addAll(invaderResponse.ships
-        .map((starship) => Transport.fromString(
-            transportType: TransportType.starship, id: starship))
+        .map((starship) => Transport.starshipFromId(id: starship))
         .toList());
 
     return Invader(
@@ -54,16 +51,27 @@ class Invader extends Equatable {
         height: invaderResponse.height,
         bornPlanet: Planet.fromString(id: invaderResponse.fromPlanet),
         skinColor: invaderResponse.skinColor,
-        gender: gender == 'male'
-            ? GenderType.male
-            : gender == 'female'
-                ? GenderType.female
-                : gender == 'n/a'
-                    ? GenderType.na
-                    : GenderType.unknown,
+        gender: GenderType.string(invaderResponse.gender),
         transports: transports);
   }
 
+  factory Invader.fromDataBase(Map<dynamic, dynamic> json) {
+    final transportsList = List<Map<dynamic, dynamic>>.from(json['transports']);
+    return Invader(
+        id: json['id'],
+        name: json['name'],
+        lastName: '',
+        bornOn: json['bornOn'],
+        eyesColor: json['eyesColor'],
+        hairColor: json['hairColor'],
+        height: json['height'],
+        bornPlanet: Planet.fromDataBase(json['bornPlanet']),
+        skinColor: json['skinColor'],
+        gender: GenderType.string(json['gender']),
+        transports: transportsList
+            .map((transport) => Transport.fromDataBase(transport))
+            .toList());
+  }
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -75,13 +83,7 @@ class Invader extends Equatable {
       'height': height,
       'bornPlanet': bornPlanet.toJson(),
       'skinColor': skinColor,
-      'gender': gender == GenderType.male
-          ? 'male'
-          : gender == GenderType.female
-              ? 'female'
-              : gender == GenderType.na
-                  ? 'n/a'
-                  : 'unknown',
+      'gender': gender.toString(),
       'transports': transports.map((transport) => transport.toJson()).toList()
     };
   }
@@ -102,4 +104,28 @@ class Invader extends Equatable {
       ];
 }
 
-enum GenderType { male, female, na, unknown }
+enum GenderType {
+  male('male'),
+  female('female'),
+  na('n/a'),
+  unknown('unknown');
+
+  const GenderType(String gender);
+  factory GenderType.string(String gender) {
+    switch (gender) {
+      case 'male':
+        return GenderType.male;
+      case 'female':
+        return GenderType.female;
+      case 'n/a':
+        return GenderType.na;
+      case 'unknown':
+        return GenderType.unknown;
+      default:
+        return GenderType.unknown;
+    }
+  }
+
+  @override
+  String toString() => name;
+}

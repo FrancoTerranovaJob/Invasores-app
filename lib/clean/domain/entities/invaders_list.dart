@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:urbe_solution/clean/data/invaders_data/api/response/get_invaders_response.dart';
 
 import 'invader.dart';
 

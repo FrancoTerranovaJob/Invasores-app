@@ -4,7 +4,7 @@ import '../clean/data/common/configuration/i_configuration_provider.dart';
 import 'kiwi.dart';
 
 class PreferencesModule {
-  static void preferencesModuleInitialize() async {
+  static Future<void> preferencesModuleInitialize() async {
     final preferencesInstance = await SharedPreferences.getInstance();
     services.registerSingleton<IConfigurationProvider>(
       (container) => ConfigurationProvider(preferences: preferencesInstance),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:urbe_solution/clean/domain/user_domain/use_cases/user_use_cases.dart';
 import 'package:urbe_solution/di/http_module.dart';
+import 'package:urbe_solution/theme/app_theme.dart';
 
 import 'clean/presentation/core/core_bloc/core_bloc.dart';
 import 'clean/presentation/core/welcome_screen.dart';
@@ -14,7 +15,7 @@ import 'di/use_case_module.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  PreferencesModule.preferencesModuleInitialize();
+  await PreferencesModule.preferencesModuleInitialize();
   HttpModule.initializeHttpModule();
   await DatabaseModule.databaseInitialize();
   ProvidersModule.providersInitialize();
@@ -31,7 +32,7 @@ class InvadersApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         title: 'Invaders',
-        theme: ThemeData(),
+        theme: Themes.mainTheme(context),
         home: BlocProvider(
           create: (context) => CoreBloc(
               initializeUseCase: services.resolve<InitializeAppUseCase>())

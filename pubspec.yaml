@@ -1,5 +1,5 @@
-name: urbe_solution
-description: A new Flutter project.
+name: InvadersApp
+description: Invaders from Star Wars.
 
 
 publish_to: 'none'
@@ -8,7 +8,7 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.16.2 <3.0.0"
+  sdk: ">=2.17.0 <3.0.0"
 
 
 dependencies:

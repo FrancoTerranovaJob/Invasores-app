@@ -12,9 +12,21 @@ class Transport extends Equatable {
     required this.type,
     required this.id,
   });
-  factory Transport.fromString(
-      {required String id, required TransportType transportType}) {
-    return Transport(name: '', type: transportType, id: id);
+  factory Transport.vehicleFromId({required String id}) {
+    return Transport(name: '', type: TransportType.vehicle, id: id);
+  }
+
+  factory Transport.starshipFromId({required String id}) {
+    return Transport(name: '', type: TransportType.starship, id: id);
+  }
+
+  factory Transport.fromDataBase(Map<dynamic, dynamic> json) {
+    return Transport(
+        name: json['name'],
+        type: 'vehicle' == json['type']
+            ? TransportType.vehicle
+            : TransportType.starship,
+        id: json['id']);
   }
 
   Map<String, dynamic> toJson() {
