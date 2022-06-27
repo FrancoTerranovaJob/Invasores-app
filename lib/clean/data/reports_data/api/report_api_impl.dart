@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
-import 'package:urbe_solution/clean/data/reports_data/api/i_report_api.dart';
-import 'package:urbe_solution/clean/data/reports_data/api/request/report_invader_request.dart';
+
+import 'i_report_api.dart';
+import 'request/report_invader_request.dart';
 
 class ReportApiImpl implements IReportApi {
   final Dio http;

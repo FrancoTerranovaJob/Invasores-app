@@ -1,7 +1,8 @@
 import 'package:equatable/equatable.dart';
-import 'package:urbe_solution/clean/data/invaders_data/api/response/invader_response.dart';
-import 'package:urbe_solution/clean/domain/entities/planet.dart';
-import 'package:urbe_solution/clean/domain/entities/transport.dart';
+
+import '../../data/invaders_data/api/response/invader_response.dart';
+import 'planet.dart';
+import 'transport.dart';
 
 class Invader extends Equatable {
   final String id;

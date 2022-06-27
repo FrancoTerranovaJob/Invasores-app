@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:urbe_solution/clean/presentation/invaders/invaders_list/invaders_list_bloc/invaders_list_bloc.dart';
 
+import '../invaders_list_bloc/invaders_list_bloc.dart';
 import 'widgets/invader_card.dart';
 import 'widgets/loading_list.dart';
 

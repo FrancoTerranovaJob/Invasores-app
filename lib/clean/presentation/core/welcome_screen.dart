@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:urbe_solution/clean/presentation/core/core_bloc/core_bloc.dart';
-import 'package:urbe_solution/clean/presentation/core/pages/splash_content.dart';
 
-import 'package:urbe_solution/clean/presentation/invaders/invaders_list/ui/invader_list.dart';
+import '../invaders/invaders_list/ui/invader_list.dart';
+import 'core_bloc/core_bloc.dart';
+import 'pages/splash_content.dart';
 
 class WelcomeScreen extends StatelessWidget {
   @override

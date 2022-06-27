@@ -1,7 +1,7 @@
+import 'package:InvadersApp/clean/data/common/data_base/models/planet_db.dart';
+import 'package:InvadersApp/clean/data/common/data_base/models/starship_db.dart';
+import 'package:InvadersApp/clean/data/common/data_base/models/vehicle_db.dart';
 import 'package:hive/hive.dart';
-import 'package:urbe_solution/clean/data/common/data_base/models/planet_db.dart';
-import 'package:urbe_solution/clean/data/common/data_base/models/starship_db.dart';
-import 'package:urbe_solution/clean/data/common/data_base/models/vehicle_db.dart';
 
 @HiveType(typeId: 0)
 class InvaderDB extends HiveObject {

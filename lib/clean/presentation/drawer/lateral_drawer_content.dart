@@ -1,7 +1,6 @@
+import 'package:InvadersApp/clean/presentation/drawer/bloc/lateral_drawer_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:urbe_solution/clean/presentation/drawer/bloc/lateral_drawer_bloc.dart';
-import 'package:urbe_solution/theme/app_theme.dart';
 
 class LateralDrawerContent extends StatelessWidget {
   final Function(bool isOnline) onModeChanged;

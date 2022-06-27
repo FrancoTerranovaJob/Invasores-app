@@ -1,12 +1,10 @@
-import 'package:urbe_solution/clean/data/invaders_data/api/request/get_invaders_request.dart';
-import 'package:urbe_solution/clean/data/invaders_data/api/response/get_invaders_response.dart';
-import 'package:urbe_solution/clean/domain/entities/planet.dart';
+import 'package:InvadersApp/clean/data/common/commons.dart';
+import 'package:InvadersApp/clean/data/invaders_data/api/request/requests.dart';
+import 'package:InvadersApp/clean/data/invaders_data/api/response/responses.dart';
+import 'package:InvadersApp/clean/domain/entities/entities.dart';
 
-import '../../../data/common/configuration/i_configuration_provider.dart';
-import '../../../data/common/data_base/i_data_base_provider.dart';
 import '../../../data/invaders_data/api/i_invaders_api.dart';
-import '../../entities/invader.dart';
-import '../../entities/invaders_list.dart';
+
 import 'i_invaders_repository.dart';
 
 class InvadersRepository implements IInvadersRepository {

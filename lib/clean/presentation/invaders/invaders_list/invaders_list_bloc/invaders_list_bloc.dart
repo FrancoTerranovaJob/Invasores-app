@@ -1,11 +1,8 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:urbe_solution/clean/domain/entities/invaders_list.dart';
-import 'package:urbe_solution/clean/domain/invaders_domain/use_cases/invaders_use_cases.dart';
-import 'package:urbe_solution/di/kiwi.dart';
-
+import '../../../../../di/kiwi.dart';
+import '../../../../domain/entities/invaders_list.dart';
+import '../../../../domain/invaders_domain/use_cases/invaders_use_cases.dart';
 part 'invaders_list_event.dart';
 part 'invaders_list_state.dart';
 

@@ -1,5 +1,3 @@
-import 'package:urbe_solution/clean/data/common/configuration/i_configuration_provider.dart';
-
 import '../clean/data/common/data_base/data_base_provider.dart';
 import '../clean/data/common/data_base/i_data_base_provider.dart';
 import 'kiwi.dart';

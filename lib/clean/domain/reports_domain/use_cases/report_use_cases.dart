@@ -1,5 +1,5 @@
-import 'package:urbe_solution/clean/domain/entities/invader.dart';
-import 'package:urbe_solution/clean/domain/reports_domain/repository/i_reports_repository.dart';
+import '../../entities/invader.dart';
+import '../repository/i_reports_repository.dart';
 
 class ReportUseCase {
   final IReportsRepository repository;

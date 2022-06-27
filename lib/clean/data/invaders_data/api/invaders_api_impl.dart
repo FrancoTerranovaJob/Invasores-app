@@ -1,14 +1,7 @@
 import 'package:dio/dio.dart';
-
+import 'request/requests.dart';
 import 'i_invaders_api.dart';
-import 'request/get_invaders_request.dart';
-import 'request/get_planet_request.dart';
-import 'request/get_starship_request.dart';
-import 'request/get_vehicle_request.dart';
-import 'response/get_invaders_response.dart';
-import 'response/planet_response.dart';
-import 'response/starship_response.dart';
-import 'response/vehicle_response.dart';
+import 'response/responses.dart';
 
 class InvadersApiImpl implements IInvadersApi {
   final Dio http;

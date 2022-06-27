@@ -1,5 +1,5 @@
-import 'package:urbe_solution/clean/domain/entities/invaders_list.dart';
-import 'package:urbe_solution/clean/domain/invaders_domain/repository/i_invaders_repository.dart';
+import '../../entities/invaders_list.dart';
+import '../repository/i_invaders_repository.dart';
 
 class GetInvadersDataUseCase {
   final IInvadersRepository repository;

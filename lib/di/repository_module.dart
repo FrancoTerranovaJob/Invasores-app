@@ -1,14 +1,13 @@
-import 'package:urbe_solution/clean/data/common/configuration/i_configuration_provider.dart';
-import 'package:urbe_solution/clean/data/common/data_base/i_data_base_provider.dart';
-import 'package:urbe_solution/clean/data/invaders_data/api/i_invaders_api.dart';
-import 'package:urbe_solution/clean/data/reports_data/api/i_report_api.dart';
-import 'package:urbe_solution/clean/domain/invaders_domain/repository/invaders_repository.dart';
-import 'package:urbe_solution/clean/domain/reports_domain/repository/i_reports_repository.dart';
-import 'package:urbe_solution/clean/domain/reports_domain/repository/reports_repository_impl.dart';
-import 'package:urbe_solution/clean/domain/user_domain/repository/i_user_repository.dart';
-import 'package:urbe_solution/clean/domain/user_domain/repository/user_repository_impl.dart';
-
+import '../clean/data/common/configuration/i_configuration_provider.dart';
+import '../clean/data/common/data_base/i_data_base_provider.dart';
+import '../clean/data/invaders_data/api/i_invaders_api.dart';
+import '../clean/data/reports_data/api/i_report_api.dart';
 import '../clean/domain/invaders_domain/repository/i_invaders_repository.dart';
+import '../clean/domain/invaders_domain/repository/invaders_repository.dart';
+import '../clean/domain/reports_domain/repository/i_reports_repository.dart';
+import '../clean/domain/reports_domain/repository/reports_repository_impl.dart';
+import '../clean/domain/user_domain/repository/i_user_repository.dart';
+import '../clean/domain/user_domain/repository/user_repository_impl.dart';
 import 'kiwi.dart';
 
 class RepositoryModule {

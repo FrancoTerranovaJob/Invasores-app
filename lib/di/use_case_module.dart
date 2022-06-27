@@ -1,12 +1,12 @@
 import 'package:kiwi/kiwi.dart';
-import 'package:urbe_solution/clean/domain/invaders_domain/repository/i_invaders_repository.dart';
-import 'package:urbe_solution/clean/domain/reports_domain/repository/i_reports_repository.dart';
-import 'package:urbe_solution/clean/domain/user_domain/repository/i_user_repository.dart';
-import 'package:urbe_solution/di/kiwi.dart';
 
+import '../clean/domain/invaders_domain/repository/i_invaders_repository.dart';
 import '../clean/domain/invaders_domain/use_cases/invaders_use_cases.dart';
+import '../clean/domain/reports_domain/repository/i_reports_repository.dart';
 import '../clean/domain/reports_domain/use_cases/report_use_cases.dart';
+import '../clean/domain/user_domain/repository/i_user_repository.dart';
 import '../clean/domain/user_domain/use_cases/user_use_cases.dart';
+import 'kiwi.dart';
 
 class UseCaseModule {
   static void useCaseInitialize() async {

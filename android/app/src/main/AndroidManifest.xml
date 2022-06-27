@@ -1,8 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.urbe.urbe_solution">
+    package="com.invaders.invaders_app">
     <uses-permission android:name="android.permission.INTERNET"/>
    <application
-        android:label="urbe_solution"
+        android:label="invaders_app"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
        android:usesCleartextTraffic="true"

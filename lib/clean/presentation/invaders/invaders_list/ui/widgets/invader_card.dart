@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:urbe_solution/clean/domain/entities/invader.dart';
+
+import '../../../../../domain/entities/invader.dart';
 
 class InvaderCard extends StatelessWidget {
   final Invader invader;

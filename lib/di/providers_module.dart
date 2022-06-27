@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
-import 'package:urbe_solution/clean/data/invaders_data/api/i_invaders_api.dart';
-import 'package:urbe_solution/clean/data/reports_data/api/i_report_api.dart';
-import 'package:urbe_solution/clean/data/reports_data/api/report_api_impl.dart';
 
+import '../clean/data/invaders_data/api/i_invaders_api.dart';
 import '../clean/data/invaders_data/api/invaders_api_impl.dart';
+import '../clean/data/reports_data/api/i_report_api.dart';
+import '../clean/data/reports_data/api/report_api_impl.dart';
 import 'kiwi.dart';
 
 class ProvidersModule {
