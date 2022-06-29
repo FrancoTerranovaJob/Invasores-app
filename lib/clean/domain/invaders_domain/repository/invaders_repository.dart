@@ -16,7 +16,10 @@ class InvadersRepository implements IInvadersRepository {
 
   @override
   Future<InvadersList> getInvadersData(InvadersList invadersList) async {
-    return await _getOnlineData(invadersList);
+    if (await configuration.isOnline()) {
+      return await _getOnlineData(invadersList);
+    }
+    return await _getOfflineData(invadersList);
   }
 
   Future<InvadersList> _getOnlineData(InvadersList invadersList) async {
@@ -31,7 +34,7 @@ class InvadersRepository implements IInvadersRepository {
                 .toList(),
             nextPage: response.nextPageUrl,
             currentPage: 1);
-        await _saveDataInDataBase(invaders.invaders);
+        await _saveDataInDataBase(invaders);
         return invaders;
       } else if (invadersList.nextPage != null) {
         final GetInvadersResponse response = await api.getInvaders(
@@ -46,7 +49,7 @@ class InvadersRepository implements IInvadersRepository {
             invaders: newInvaders,
             nextPage: response.nextPageUrl,
             currentPage: invadersList.currentPage + 1);
-        await _saveDataInDataBase(invaders.invaders);
+        await _saveDataInDataBase(invaders);
         return invaders;
       }
       return invadersList;
@@ -55,21 +58,26 @@ class InvadersRepository implements IInvadersRepository {
     }
   }
 
-  Future<InvadersList> _getOfflineData() async {
+  Future<InvadersList> _getOfflineData(InvadersList invadersList) async {
     try {
-      final response = await db.getInvaders();
-      final invaderList =
-          response.map((invader) => Invader.fromDataBase(invader)).toList();
-      return InvadersList(invaders: invaderList);
+      int currentPage = invadersList.currentPage + 1;
+      if (db.canLoadMore(currentPage)) {
+        final response = await db.getInvaders(currentPage);
+        int nextPage = currentPage + 1;
+        return InvadersList.fromDataBase(response, db.canLoadMore(nextPage));
+      }
+      return InvadersList(
+          invaders: invadersList.invaders,
+          nextPage: null,
+          currentPage: invadersList.currentPage);
     } catch (error, stack) {
       throw GetOfflineDataException(error, stack);
     }
   }
 
-  Future<bool> _saveDataInDataBase(List<Invader> invaders) async {
+  Future<bool> _saveDataInDataBase(InvadersList invaders) async {
     try {
-      await db
-          .saveInvaders(invaders.map((invader) => invader.toJson()).toList());
+      await db.saveInvaders(invaders.currentPage, invaders.toJson());
       return true;
     } catch (error, stack) {
       throw SaveDataException(error, stack);

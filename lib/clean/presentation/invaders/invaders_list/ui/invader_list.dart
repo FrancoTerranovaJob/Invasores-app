@@ -1,3 +1,4 @@
+import 'package:InvadersApp/clean/presentation/invaders/invaders_list/ui/widgets/page_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -11,7 +12,7 @@ class InvaderList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => InvadersListBloc()..add(GetInvadersEvent()),
+      create: (context) => InvadersListBloc()..add(NextPageEvent()),
       child: _InvaderListView(),
     );
   }
@@ -22,7 +23,6 @@ class _InvaderListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final invaderBloc = BlocProvider.of<InvadersListBloc>(context);
     return BlocBuilder<InvadersListBloc, InvadersListState>(
       builder: (context, state) {
         if (state.invaderStatus == InvadersStatus.data) {
@@ -31,29 +31,17 @@ class _InvaderListView extends StatelessWidget {
             slivers: [
               SliverGrid(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2, mainAxisExtent: 350),
+                    crossAxisCount: 2, mainAxisExtent: 300),
                 delegate: SliverChildBuilderDelegate(
                     childCount: invaderList.length, (context, index) {
                   return InvaderCard(invader: invaderList[index]);
                 }),
               ),
               SliverToBoxAdapter(
-                child: SizedBox(
+                child: Container(
+                  color: Theme.of(context).colorScheme.primary,
                   height: 50,
-                  child: Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        TextButton(
-                            onPressed: () =>
-                                invaderBloc.add(PreviousPageEvent()),
-                            child: Text('< Previous')),
-                        TextButton(
-                            onPressed: () => invaderBloc.add(NextPageEvent()),
-                            child: Text('Next >'))
-                      ],
-                    ),
-                  ),
+                  child: Center(child: PageButtons()),
                 ),
               )
             ],
@@ -67,13 +55,3 @@ class _InvaderListView extends StatelessWidget {
     );
   }
 }
-/*
-
-GridView.builder(
-itemCount: invaderList.length,
-gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-crossAxisCount: 2, mainAxisExtent: 350),
-itemBuilder: (BuildContext context, int index) {
-return InvaderCard(invader: invaderList[index]);
-},
-);*/

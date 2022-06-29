@@ -1,3 +1,4 @@
+import 'package:InvadersApp/clean/presentation/home/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -14,9 +15,7 @@ class WelcomeScreen extends StatelessWidget {
           return SplashContent();
         }
         if (state is InitializedAppState) {
-          return Scaffold(
-              backgroundColor: Theme.of(context).colorScheme.onSecondary,
-              body: SafeArea(child: InvaderList()));
+          return HomePage();
         } else {
           return Container(
             color: Colors.white,

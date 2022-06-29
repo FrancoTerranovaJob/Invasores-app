@@ -1,3 +1,4 @@
+import 'package:InvadersApp/clean/presentation/common/widgets/progress/progress.dart';
 import 'package:flutter/material.dart';
 
 class LoadingList extends StatelessWidget {
@@ -5,6 +6,6 @@ class LoadingList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Progress();
   }
 }

@@ -18,9 +18,10 @@ class DataBaseProvider extends IDataBaseProvider {
   }
 
   @override
-  Future<bool> saveInvaders(List<Map<String, dynamic>> invaderList) async {
+  Future<bool> saveInvaders(
+      int pageNumber, Map<String, dynamic> invaderList) async {
     try {
-      await db.put('invadersList', invaderList);
+      await db.put(pageNumber, invaderList);
 
       return true;
     } catch (_) {
@@ -29,13 +30,17 @@ class DataBaseProvider extends IDataBaseProvider {
   }
 
   @override
-  Future<List<Map<dynamic, dynamic>>> getInvaders() async {
+  Future<Map<dynamic, dynamic>> getInvaders(int pageNumber) async {
     try {
-      final invaderList =
-          List<Map<dynamic, dynamic>>.from(db.get('invadersList')!);
+      final invaderList = Map<dynamic, dynamic>.from(db.get(pageNumber)!);
       return invaderList;
     } catch (_) {
       rethrow;
     }
+  }
+
+  @override
+  bool canLoadMore(int nextPage) {
+    return db.containsKey(nextPage);
   }
 }
