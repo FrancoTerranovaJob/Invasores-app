@@ -27,7 +27,7 @@ class RoundedButton extends StatelessWidget {
             child: Center(
               child: Text(
                 text,
-                style: Themes.mainTheme(context).textTheme.subtitle1,
+                style: Theme.of(context).textTheme.subtitle1,
               ),
             ),
           ),

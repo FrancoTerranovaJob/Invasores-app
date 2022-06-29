@@ -1,3 +1,4 @@
+import 'package:InvadersApp/clean/data/invaders_data/photos/invaders_photos.dart';
 import 'package:equatable/equatable.dart';
 
 import '../../data/invaders_data/api/response/invader_response.dart';
@@ -16,6 +17,7 @@ class Invader extends Equatable {
   final String skinColor;
   final GenderType gender;
   final List<Transport> transports;
+  final String imageUrl;
 
   const Invader(
       {required this.id,
@@ -28,7 +30,8 @@ class Invader extends Equatable {
       required this.bornPlanet,
       required this.skinColor,
       required this.gender,
-      required this.transports});
+      required this.transports,
+      required this.imageUrl});
 
   factory Invader.fromInvaderResponse(
       {required InvaderResponse invaderResponse}) {
@@ -53,7 +56,8 @@ class Invader extends Equatable {
         bornPlanet: Planet.fromString(id: invaderResponse.fromPlanet),
         skinColor: invaderResponse.skinColor,
         gender: GenderType.string(invaderResponse.gender),
-        transports: transports);
+        transports: transports,
+        imageUrl: InvadersPhotos.getInvaderPhoto(invaderResponse.name));
   }
 
   factory Invader.fromDataBase(Map<dynamic, dynamic> json) {
@@ -71,7 +75,8 @@ class Invader extends Equatable {
         gender: GenderType.string(json['gender']),
         transports: transportsList
             .map((transport) => Transport.fromDataBase(transport))
-            .toList());
+            .toList(),
+        imageUrl: InvadersPhotos.getInvaderPhoto(json['name']));
   }
   Map<String, dynamic> toJson() {
     return {

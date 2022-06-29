@@ -6,7 +6,11 @@ class GetInvadersDataUseCase {
   GetInvadersDataUseCase(this.repository);
 
   Future<InvadersList> call(InvadersList invadersList) async {
-    return await repository.getInvadersData(invadersList);
+    try {
+      return await repository.getInvadersData(invadersList);
+    } catch (_) {
+      rethrow;
+    }
   }
 }
 
@@ -15,8 +19,12 @@ class SyncDataUseCase {
   SyncDataUseCase(this.repository);
 
   Future<InvadersList> call(InvadersList invadersList) async {
-    final result = await repository.syncData();
+    try {
+      final result = await repository.syncData();
 
-    return result;
+      return result;
+    } catch (_) {
+      rethrow;
+    }
   }
 }

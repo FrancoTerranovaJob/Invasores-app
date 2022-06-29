@@ -8,3 +8,13 @@ class GetInvadersEvent extends InvadersListEvent {
   @override
   List<Object> get props => [];
 }
+
+class NextPageEvent extends InvadersListEvent {
+  @override
+  List<Object> get props => [];
+}
+
+class PreviousPageEvent extends InvadersListEvent {
+  @override
+  List<Object> get props => [];
+}

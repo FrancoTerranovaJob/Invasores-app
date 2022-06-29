@@ -28,27 +28,19 @@ class LateralDrawerContent extends StatelessWidget {
         ],
         child: Drawer(
           backgroundColor:
-              Themes.mainTheme(context).colorScheme.primary.withOpacity(0.85),
+              Theme.of(context).colorScheme.primary.withOpacity(0.85),
           child: Container(
-            color: Themes.mainTheme(context)
-                .colorScheme
-                .onBackground
-                .withOpacity(0.50),
+            color: Theme.of(context).colorScheme.onBackground.withOpacity(0.50),
             child: ListView(
               children: [
                 Container(
-                  color: Themes.mainTheme(context).colorScheme.primary,
+                  color: Theme.of(context).colorScheme.primary,
                   child: DrawerHeader(
                     child: Center(
                         child: Text(
                       'Invasores',
-                      style: Themes.mainTheme(context)
-                          .textTheme
-                          .headline1!
-                          .copyWith(
-                              color: Themes.mainTheme(context)
-                                  .colorScheme
-                                  .onBackground),
+                      style: Theme.of(context).textTheme.headline1!.copyWith(
+                          color: Theme.of(context).colorScheme.onBackground),
                     )),
                   ),
                 ),
@@ -59,20 +51,19 @@ class LateralDrawerContent extends StatelessWidget {
                       leading: Icon(
                         Icons.signal_wifi_4_bar_rounded,
                         color: state.isOnline
-                            ? Themes.mainTheme(context).colorScheme.background
-                            : Themes.mainTheme(context)
+                            ? Theme.of(context).colorScheme.background
+                            : Theme.of(context)
                                 .colorScheme
                                 .background
                                 .withOpacity(0.25),
                       ),
                       title: Text(
                         'Modo online',
-                        style: Themes.mainTheme(context).textTheme.headline2,
+                        style: Theme.of(context).textTheme.headline2,
                       ),
                       trailing: Switch(
-                          activeColor: Themes.mainTheme(context)
-                              .colorScheme
-                              .onBackground,
+                          activeColor:
+                              Theme.of(context).colorScheme.onBackground,
                           value: state.isOnline,
                           onChanged: (value) {
                             BlocProvider.of<LateralDrawerBloc>(context)
@@ -86,19 +77,19 @@ class LateralDrawerContent extends StatelessWidget {
                       leading: Icon(
                         Icons.sync,
                         color: state.isOnline
-                            ? Themes.mainTheme(context).colorScheme.background
-                            : Themes.mainTheme(context)
+                            ? Theme.of(context).colorScheme.background
+                            : Theme.of(context)
                                 .colorScheme
                                 .background
                                 .withOpacity(0.25),
                       ),
                       title: Text(
                         'Sincronizar datos',
-                        style: Themes.mainTheme(context).textTheme.subtitle1,
+                        style: Theme.of(context).textTheme.subtitle1,
                       ),
                       subtitle: Text(
                         'Trae nuevamente todos los datos disponibles.',
-                        style: Themes.mainTheme(context).textTheme.subtitle2,
+                        style: Theme.of(context).textTheme.subtitle2,
                       ),
                       onTap: () {
                         BlocProvider.of<LateralDrawerBloc>(context)

@@ -22,17 +22,41 @@ class _InvaderListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final invaderBloc = BlocProvider.of<InvadersListBloc>(context);
     return BlocBuilder<InvadersListBloc, InvadersListState>(
       builder: (context, state) {
         if (state.invaderStatus == InvadersStatus.data) {
           final invaderList = state.invadersList.invaders;
-          return GridView.builder(
-            itemCount: invaderList.length,
-            gridDelegate:
-                SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-            itemBuilder: (BuildContext context, int index) {
-              return InvaderCard(invader: invaderList[index]);
-            },
+          return CustomScrollView(
+            slivers: [
+              SliverGrid(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2, mainAxisExtent: 350),
+                delegate: SliverChildBuilderDelegate(
+                    childCount: invaderList.length, (context, index) {
+                  return InvaderCard(invader: invaderList[index]);
+                }),
+              ),
+              SliverToBoxAdapter(
+                child: SizedBox(
+                  height: 50,
+                  child: Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        TextButton(
+                            onPressed: () =>
+                                invaderBloc.add(PreviousPageEvent()),
+                            child: Text('< Previous')),
+                        TextButton(
+                            onPressed: () => invaderBloc.add(NextPageEvent()),
+                            child: Text('Next >'))
+                      ],
+                    ),
+                  ),
+                ),
+              )
+            ],
           );
         }
         if (state.invaderStatus == InvadersStatus.error) {
@@ -43,3 +67,13 @@ class _InvaderListView extends StatelessWidget {
     );
   }
 }
+/*
+
+GridView.builder(
+itemCount: invaderList.length,
+gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+crossAxisCount: 2, mainAxisExtent: 350),
+itemBuilder: (BuildContext context, int index) {
+return InvaderCard(invader: invaderList[index]);
+},
+);*/

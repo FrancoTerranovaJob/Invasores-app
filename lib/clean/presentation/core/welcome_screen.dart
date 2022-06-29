@@ -14,7 +14,9 @@ class WelcomeScreen extends StatelessWidget {
           return SplashContent();
         }
         if (state is InitializedAppState) {
-          return InvaderList();
+          return Scaffold(
+              backgroundColor: Theme.of(context).colorScheme.onSecondary,
+              body: SafeArea(child: InvaderList()));
         } else {
           return Container(
             color: Colors.white,

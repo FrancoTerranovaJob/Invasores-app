@@ -1,3 +1,4 @@
+import 'package:InvadersApp/clean/data/reports_data/api/exceptions/report_exception.dart';
 import 'package:dio/dio.dart';
 
 import 'i_report_api.dart';
@@ -8,7 +9,13 @@ class ReportApiImpl implements IReportApi {
   ReportApiImpl({required this.http});
   @override
   Future<bool> reportInvader(ReportInvaderRequest reportInvaderRequest) async {
-    await http.post('/posts', data: reportInvaderRequest.toJson());
-    return true;
+    try {
+      await http.post('/posts', data: reportInvaderRequest.toJson());
+      return true;
+    } on DioError catch (error, stack) {
+      throw DioException(error, stack);
+    } catch (error, stack) {
+      throw SendReportException(error, stack);
+    }
   }
 }

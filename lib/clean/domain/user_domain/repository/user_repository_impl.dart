@@ -1,5 +1,6 @@
-import '../../../data/common/configuration/i_configuration_provider.dart';
-import '../../../data/common/data_base/i_data_base_provider.dart';
+import 'package:InvadersApp/clean/data/common/commons.dart';
+import 'package:InvadersApp/clean/domain/user_domain/repository/exceptions/user_repository_exception.dart';
+
 import 'i_user_repository.dart';
 
 class UserRepositoryImpl implements IUserRepository {
@@ -9,17 +10,21 @@ class UserRepositoryImpl implements IUserRepository {
 
   @override
   Future<bool> initializeApp() async {
-    final isFirstTime = await configuration.getIsFirstTime();
-    if (isFirstTime) {
-      await db.createDataBase(true);
+    try {
+      final isFirstTime = await configuration.getIsFirstTime();
+      if (isFirstTime) {
+        await db.createDataBase();
 
-      await configuration.setIsFirstTime(false);
-    } else {
-      configuration.setIsOnline(false);
-      await db.createDataBase(false);
+        await configuration.setIsFirstTime(false);
+      } else {
+        configuration.setIsOnline(false);
+        await db.createDataBase();
+      }
+
+      return true;
+    } catch (error, stack) {
+      throw InitializeAppException(error, stack);
     }
-
-    return true;
   }
 
   @override

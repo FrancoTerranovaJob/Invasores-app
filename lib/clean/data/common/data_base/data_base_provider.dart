@@ -6,19 +6,14 @@ class DataBaseProvider extends IDataBaseProvider {
   late final Box db;
 
   @override
-  Future<bool> createDataBase(bool firstTime) async {
+  Future<bool> createDataBase() async {
     try {
-      if (firstTime) {
-        await Hive.initFlutter();
-        db = await Hive.openBox('invaders');
-        return true;
-      }
       await Hive.initFlutter();
       db = await Hive.openBox('invaders');
 
       return true;
-    } catch (e) {
-      return false;
+    } catch (_) {
+      rethrow;
     }
   }
 
@@ -28,15 +23,19 @@ class DataBaseProvider extends IDataBaseProvider {
       await db.put('invadersList', invaderList);
 
       return true;
-    } catch (e) {
-      return false;
+    } catch (_) {
+      rethrow;
     }
   }
 
   @override
   Future<List<Map<dynamic, dynamic>>> getInvaders() async {
-    final invaderList =
-        List<Map<dynamic, dynamic>>.from(db.get('invadersList')!);
-    return invaderList;
+    try {
+      final invaderList =
+          List<Map<dynamic, dynamic>>.from(db.get('invadersList')!);
+      return invaderList;
+    } catch (_) {
+      rethrow;
+    }
   }
 }
