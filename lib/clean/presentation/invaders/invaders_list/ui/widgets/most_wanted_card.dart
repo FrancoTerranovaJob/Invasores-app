@@ -1,11 +1,11 @@
 import 'package:InvadersApp/clean/domain/entities/entities.dart';
-import 'package:InvadersApp/clean/presentation/invaders/invaders_list/ui/widgets/invader_portrair.dart';
 import 'package:flutter/material.dart';
 
-class InvaderCard extends StatelessWidget {
+class MostWantedInvaderCard extends StatelessWidget {
   final Invader invader;
 
-  const InvaderCard({Key? key, required this.invader}) : super(key: key);
+  const MostWantedInvaderCard({Key? key, required this.invader})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,25 +18,18 @@ class InvaderCard extends StatelessWidget {
         .subtitle2!
         .copyWith(color: Theme.of(context).colorScheme.onBackground);
     return Card(
-      color: Theme.of(context).colorScheme.primary,
+      shape: RoundedRectangleBorder(
+          side: BorderSide(color: Theme.of(context).colorScheme.onPrimary)),
+      color: Theme.of(context).colorScheme.surface.withOpacity(0.7),
       elevation: 10.0,
       child: Column(
         children: [
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: InkWell(
+              child: CircleAvatar(
                 radius: 100,
-                onTap: () async {
-                  await showDialog(
-                      context: context,
-                      builder: (BuildContext context) =>
-                          InvaderPortrair(invader: invader));
-                },
-                child: CircleAvatar(
-                  radius: 100,
-                  backgroundImage: NetworkImage(invader.imageUrl),
-                ),
+                backgroundImage: NetworkImage(invader.imageUrl),
               ),
             ),
           ),

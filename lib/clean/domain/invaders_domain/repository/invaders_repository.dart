@@ -61,15 +61,10 @@ class InvadersRepository implements IInvadersRepository {
   Future<InvadersList> _getOfflineData(InvadersList invadersList) async {
     try {
       int currentPage = invadersList.currentPage + 1;
-      if (db.canLoadMore(currentPage)) {
-        final response = await db.getInvaders(currentPage);
-        int nextPage = currentPage + 1;
-        return InvadersList.fromDataBase(response, db.canLoadMore(nextPage));
-      }
-      return InvadersList(
-          invaders: invadersList.invaders,
-          nextPage: null,
-          currentPage: invadersList.currentPage);
+
+      final response = await db.getInvaders(currentPage);
+      int nextPage = currentPage + 1;
+      return InvadersList.fromDataBase(response, db.canLoadMore(nextPage));
     } catch (error, stack) {
       throw GetOfflineDataException(error, stack);
     }
